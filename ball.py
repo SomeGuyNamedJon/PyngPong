@@ -41,11 +41,18 @@ class Ball(pygame.sprite.Sprite):
         self.rect.center = self.position
 
 
-    def paddleHit(self):
-        (x, y) = self.position
+    def paddleHit(self, paddle):
         (dx, dy) = self.direction
 
-        dx *= -1
+        if(self.rect.centery > paddle.rect.top and self.rect.centery < paddle.rect.bottom):
+            dx *= -1
 
-        self.position = (x, y)
+        if(self.rect.centery < paddle.rect.top):
+            dy = -1
+            self.rect.bottom = paddle.rect.top
+
+        if(self.rect.centery > paddle.rect.bottom):
+            dy = 1
+            self.rect.top = paddle.rect.bottom
+
         self.direction = (dx, dy)

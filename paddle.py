@@ -27,7 +27,7 @@ class Paddle(pygame.sprite.Sprite):
 
     def checkCollision(self, ball):
         if(self.rect.colliderect(ball)):
-            ball.paddleHit()
+            ball.paddleHit(self)
 
 class PlayerPaddle(Paddle):
     def update(self, mouse_pos, ball):
