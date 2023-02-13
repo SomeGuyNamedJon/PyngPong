@@ -13,7 +13,7 @@ class Paddle(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.position = (pos_x, pos_y)
-
+        self.name = ""
         self.image = pygame.Surface(PADDLE_DIMENSIONS)
         self.image.fill(BASE_COLOR)
         self.rect = self.image.get_rect()
@@ -35,6 +35,10 @@ class Paddle(pygame.sprite.Sprite):
         self.rect.center = self.position
 
 class PlayerPaddle(Paddle):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(pos_x, pos_y)
+        self.name = "player"
+
     def update(self, mouse_pos, ball):
         (_, mouse_y) = mouse_pos
         self.position = (self.position[0], mouse_y)
@@ -45,13 +49,13 @@ class EnemyPaddle(Paddle):
     def __init__(self, pos_x, pos_y):
         super().__init__(pos_x, pos_y)
         self.velocity = BASE_VELOCITY
+        self.name = "enemy"
 
     def update(self, ball):
         (ball_x, ball_y) = ball.position
         (x, y) = self.position
         distance = abs(x - ball_x) // 10
         step = round(1/(distance+1), 2)
-        print(step)
 
         if(self.rect.top < ball_y < self.rect.bottom):
             self.velocity = BASE_VELOCITY
