@@ -6,6 +6,7 @@ BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
 POINT_COLOR = (230, 255, 235)
 LOSS_COLOR = (230, 180, 200)
+BASE_VELOCITY = 3
 
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -40,7 +41,25 @@ class PlayerPaddle(Paddle):
         super().update(ball)
 
 class EnemyPaddle(Paddle):
+    
+    def __init__(self, pos_x, pos_y):
+        super().__init__(pos_x, pos_y)
+        self.velocity = BASE_VELOCITY
+
     def update(self, ball):
-        (_, ball_y) = ball.position
-        self.position = (self.position[0], ball_y)
+        (ball_x, ball_y) = ball.position
+        (x, y) = self.position
+        distance = abs(x - ball_x) // 10
+        step = round(1/(distance+1), 2)
+        print(step)
+
+        if(self.rect.top < ball_y < self.rect.bottom):
+            self.velocity = BASE_VELOCITY
+        if(y > ball_y):
+            self.position = (x, y-self.velocity)
+            self.velocity += step
+        if(y < ball_y):
+            self.position = (x, y+self.velocity)
+            self.velocity += step
+
         super().update(ball)
