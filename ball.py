@@ -21,21 +21,26 @@ class Ball(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-    def handleBoundry(self, dimensions):
+    def handleBoundry(self, dimensions, score):
         (width, height) = dimensions
         (x, y) = self.position
         (dx, dy) = self.direction
         if y <= 0 or y >= height:
             dy *= -1
         if x <= 0 or x >= width:
+            if(x <= 0):
+                score.enemyPoint()
+            else:
+                score.playerPoint()
+
             dx *= -1
             (x, y) = (width//2, height//2)
 
         self.position = (x, y)
         self.direction = (dx, dy)
 
-    def update(self, dimensions):
-        self.handleBoundry(dimensions)
+    def update(self, dimensions, score):
+        self.handleBoundry(dimensions, score)
         vector = tuple([x*self.velocity for x in self.direction]) 
         self.position = tuple(py.add(self.position, vector))
         self.rect.center = self.position

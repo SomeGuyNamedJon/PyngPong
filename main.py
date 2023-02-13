@@ -2,6 +2,7 @@ import time
 import pygame
 from paddle import PlayerPaddle, EnemyPaddle
 from ball import Ball
+from scorecard import Score
 
 pygame.init()
 pygame.display.set_caption("Pλng")
@@ -15,6 +16,7 @@ FPS = 60
 playerPaddle = PlayerPaddle(50, HEIGHT//2)
 enemyPaddle = EnemyPaddle(WIDTH - 50, HEIGHT//2)
 ball = Ball(5, (-1,1), WIDTH//2, HEIGHT//2) 
+score = Score()
 
 def draw_background():
     SCREEN.fill(BG_COLOR)
@@ -23,10 +25,11 @@ def draw_board():
     playerPaddle.draw(SCREEN)
     enemyPaddle.draw(SCREEN)
     ball.draw(SCREEN)
+    score.draw(SCREEN, DIMENSIONS)
 
 def update_game():
     mouse_pos = pygame.mouse.get_pos()
-    ball.update(DIMENSIONS)
+    ball.update(DIMENSIONS, score)
     playerPaddle.update(mouse_pos, ball)
     enemyPaddle.update(ball)
 
