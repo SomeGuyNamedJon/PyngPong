@@ -26,12 +26,12 @@ class Paddle(pygame.sprite.Sprite):
     def handleBoundry(self, dimensions):
         (width, height) = dimensions
 
-    def checkCollision(self, ball):
+    def handleCollision(self, ball):
         if(self.rect.colliderect(ball)):
             ball.paddleHit(self)
 
     def update(self, ball):
-        self.checkCollision(ball)
+        self.handleCollision(ball)
         self.rect.center = self.position
 
 class PlayerPaddle(Paddle):
@@ -54,8 +54,12 @@ class EnemyPaddle(Paddle):
     def update(self, ball):
         (ball_x, ball_y) = ball.position
         (x, y) = self.position
-        distance = abs(x - ball_x) // 10
-        step = round(1/(distance+1), 2)
+        distance = x - ball_x
+
+        if(distance <= 0):
+            step = 0
+        else:
+            step = (BASE_VELOCITY/(distance+1)) * 10
 
         if(self.rect.top < ball_y < self.rect.bottom):
             self.velocity = BASE_VELOCITY
