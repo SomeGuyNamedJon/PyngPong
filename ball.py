@@ -34,6 +34,7 @@ class Ball(pygame.sprite.Sprite):
                 score.playerPoint()
 
             dx *= -1
+            dy *= -1
             (x, y) = (width//2, height//2)
 
         self.position = (x, y)
