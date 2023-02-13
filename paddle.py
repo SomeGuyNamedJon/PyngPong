@@ -23,8 +23,11 @@ class Paddle(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-    def handleBoundry(self, dimensions):
-        (width, height) = dimensions
+    def handleBoundry(self, height):
+        if(self.rect.top <= 0):
+            self.rect.top = 0
+        if(self.rect.bottom >= height):
+            self.rect.bottom = height
 
     def handleCollision(self, ball):
         if(self.rect.colliderect(ball)):
@@ -33,6 +36,7 @@ class Paddle(pygame.sprite.Sprite):
     def update(self, ball):
         self.handleCollision(ball)
         self.rect.center = self.position
+        self.handleBoundry(540)
 
 class PlayerPaddle(Paddle):
     def __init__(self, pos_x, pos_y):
