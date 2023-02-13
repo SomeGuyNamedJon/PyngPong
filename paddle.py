@@ -29,14 +29,18 @@ class Paddle(pygame.sprite.Sprite):
         if(self.rect.colliderect(ball)):
             ball.paddleHit(self)
 
+    def update(self, ball):
+        self.checkCollision(ball)
+        self.rect.center = self.position
+
 class PlayerPaddle(Paddle):
     def update(self, mouse_pos, ball):
         (_, mouse_y) = mouse_pos
-        self.rect.centery = mouse_y
-        self.checkCollision(ball)
+        self.position = (self.position[0], mouse_y)
+        super().update(ball)
 
 class EnemyPaddle(Paddle):
     def update(self, ball):
         (_, ball_y) = ball.position
-        self.rect.centery = ball_y
-        self.checkCollision(ball)
+        self.position = (self.position[0], ball_y)
+        super().update(ball)
