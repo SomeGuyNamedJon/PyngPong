@@ -26,9 +26,9 @@ def draw_background():
     SCREEN.fill(BG_COLOR)
 
 def draw_board():
+    ball.draw(SCREEN)
     playerPaddle.draw(SCREEN)
     enemyPaddle.draw(SCREEN)
-    ball.draw(SCREEN)
     score.draw(SCREEN, DIMENSIONS)
 
 def update_game():
