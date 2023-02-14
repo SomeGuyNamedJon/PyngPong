@@ -2,19 +2,25 @@ import pygame
 pygame.init()
 
 START_SCORE = (0, 0)
-TEXT_COLOR = (255, 255, 255)
+TEXT_COLOR = (70, 70, 70)
 
 class Score():
     def __init__(self):
         (self.player, self.enemy) = START_SCORE
-        self.font = pygame.font.SysFont('freesanbold.ttf', 100)
+        self.font = pygame.font.SysFont('freesanbold.ttf', 500)
     
     def draw(self, screen, dimensions):
-        (width, _) = dimensions
+        (width, height) = dimensions
         playerScore = self.font.render(str(self.player), True, TEXT_COLOR)
         enemyScore = self.font.render(str(self.enemy), True, TEXT_COLOR)
-        screen.blit(playerScore, ((width // 4) - 25, 50))
-        screen.blit(enemyScore, ((width - (width // 4)) - 25, 50))
+        
+        p_text = playerScore.get_rect()
+        e_text = enemyScore.get_rect()
+        p_text.center = ((width // 4), (height // 2))
+        e_text.center = (width - (width//4), (height // 2))
+
+        screen.blit(playerScore, p_text)
+        screen.blit(enemyScore, e_text)
 
     def playerPoint(self):
         self.player += 1
