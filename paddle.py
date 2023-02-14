@@ -15,7 +15,6 @@ class Paddle(pygame.sprite.Sprite):
         
         self.sound = sound
         self.position = (pos_x, pos_y)
-        self.position_old = self.position 
         self.image = pygame.Surface(PADDLE_DIMENSIONS)
         self.image.fill(BASE_COLOR)
         self.rect = self.image.get_rect()
@@ -28,7 +27,8 @@ class Paddle(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-    def handleBoundry(self, height):
+    def handleBoundry(self, dimensions):
+        (_, height) = dimensions
         if(self.rect.top <= 0):
             self.rect.top = 0
         if(self.rect.bottom >= height):
@@ -55,24 +55,32 @@ class Paddle(pygame.sprite.Sprite):
             self.reactHit()
             ball.paddleHit(self)
 
-    def update(self, ball):
+    def updateXPOS(self, dimensions):
+        pass
+
+    def update(self, ball, dimensions):
         self.handleCollision(ball)
         self.clearHit()
         self.rect.center = self.position
-        self.handleBoundry(540)
+        self.handleBoundry(dimensions)
+        self.updateXPOS(dimensions)
 
 class PlayerPaddle(Paddle):
-    def update(self, mouse_pos, ball):
+    def update(self, mouse_pos, ball, dimensions):
         (_, mouse_y) = mouse_pos
         self.position = (self.position[0], mouse_y)
-        super().update(ball)
+        super().update(ball, dimensions)
 
 class EnemyPaddle(Paddle):
     def __init__(self, pos_x, pos_y, sound):
         super().__init__(pos_x, pos_y, sound)
         self.speed = BASE_SPEED
 
-    def update(self, ball):
+    def updateXPOS(self, dimensions):
+        (width, _) = dimensions
+        self.position = (width - 50, self.position[1])
+
+    def update(self, ball, dimensions):
         (ball_x, ball_y) = ball.position
         (x, y) = self.position
         distance = x - ball_x
@@ -96,4 +104,4 @@ class EnemyPaddle(Paddle):
             
         self.position = (x, y+(self.speed*direction))
 
-        super().update(ball)
+        super().update(ball, dimensions)
