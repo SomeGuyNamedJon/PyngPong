@@ -7,7 +7,7 @@ TEXT_COLOR = (70, 70, 70)
 class Score():
     def __init__(self):
         (self.player, self.enemy) = START_SCORE
-        self.font = pygame.font.SysFont('freesanbold.ttf', 500)
+        self.font = pygame.font.Font("BitPap.ttf", 500)
     
     def draw(self, screen, dimensions):
         (width, height) = dimensions
@@ -16,8 +16,8 @@ class Score():
         
         p_text = playerScore.get_rect()
         e_text = enemyScore.get_rect()
-        p_text.center = ((width // 4), (height // 2))
-        e_text.center = (width - (width//4), (height // 2))
+        p_text.center = ((width // 4), (height // 2) + 50)
+        e_text.center = (width - (width//4), (height // 2) + 50)
 
         screen.blit(playerScore, p_text)
         screen.blit(enemyScore, e_text)
