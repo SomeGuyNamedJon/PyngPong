@@ -7,12 +7,13 @@ HIT_COLOR = (255,255,255)
 SPEED = 5
 
 class Ball(pygame.sprite.Sprite):
-    def __init__(self, velocity, direction, pos_x, pos_y):
+    def __init__(self, velocity, direction, pos_x, pos_y, sound):
         pygame.sprite.Sprite.__init__(self)
 
         self.direction = direction
         self.velocity = velocity
         self.position = (pos_x,pos_y)
+        self.sound = sound
 
         self.image = pygame.Surface((30, 30))
         self.image.fill(BASE_COLOR)
@@ -34,6 +35,8 @@ class Ball(pygame.sprite.Sprite):
         (width, height) = dimensions
         self.rect.clamp_ip(screen.get_rect())
         if self.rect.top == 0 or self.rect.bottom == height:
+            self.sound.play()
+            self.reactHit()
             self.direction = (self.direction[0], -self.direction[1])
         if self.rect.left <= 0 or self.rect.right >= width:
             if(self.rect.left <= 0):
