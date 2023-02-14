@@ -26,10 +26,10 @@ def draw_background():
     SCREEN.fill(BG_COLOR)
 
 def draw_board():
+    score.draw(SCREEN, DIMENSIONS)
     ball.draw(SCREEN)
     playerPaddle.draw(SCREEN)
     enemyPaddle.draw(SCREEN)
-    score.draw(SCREEN, DIMENSIONS)
 
 def update_game():
     mouse_pos = pygame.mouse.get_pos()
