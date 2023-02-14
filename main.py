@@ -4,7 +4,7 @@ from paddle import PlayerPaddle, EnemyPaddle
 from ball import Ball
 from scorecard import Score
 import os
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+os.chdir("assets")
 
 pygame.init()
 pygame.display.set_caption("Pλng")
