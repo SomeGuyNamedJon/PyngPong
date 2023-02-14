@@ -11,7 +11,7 @@ class Ball(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.direction = direction
-        self.velocity = (SPEED, SPEED)
+        self.velocity = velocity
         self.position = (pos_x,pos_y)
 
         self.image = pygame.Surface((30, 30))
@@ -40,31 +40,36 @@ class Ball(pygame.sprite.Sprite):
 
         self.position = (x, y)
         self.direction = (dx, dy)
-        self.velocity = (SPEED, SPEED)
 
     def update(self, dimensions, score):
         self.handleBoundry(dimensions, score)
-        self.velocity = tuple([x*y for x,y in zip(self.direction, self.velocity)])
+        self.velocity = tuple(py.multiply(self.direction, SPEED))
         self.position = tuple(py.add(self.position, self.velocity))
         self.rect.center = self.position
 
     def paddleHit(self, paddle):
         (dx, dy) = self.direction
+        
+        paddle_left = (self.rect.right > paddle.rect.left and self.rect.left < paddle.rect.left)
+        paddle_right = (self.rect.left < paddle.rect.right and self.rect.right > paddle.rect.right)
+        paddle_top = (self.rect.bottom > paddle.rect.top and self.rect.top < paddle.rect.top)
+        paddle_bottom = (self.rect.top < paddle.rect.bottom and self.rect.bottom > paddle.rect.bottom)
 
-        if self.rect.right > paddle.rect.right:
-            dx = 1
-            self.rect.left = paddle.rect.right
-        if self.rect.left < paddle.rect.left:
-            dx = -1
+        paddle_side = (paddle.rect.top < self.rect.centery < paddle.rect.bottom) 
+        paddle_block = (paddle.rect.left < self.rect.centerx < paddle.rect.right)
+
+        if(paddle_side and paddle_left):
             self.rect.right = paddle.rect.left
-        if self.rect.bottom > paddle.rect.bottom:
-            dy = 1
-            self.rect.top = paddle.rect.bottom
-        if self.rect.top < paddle.rect.top:
-            dy = -1
+            dx = -1
+        if(paddle_side and paddle_right):
+            self.rect.left = paddle.rect.right
+            dx = 1
+        if(paddle_block and paddle_top):
             self.rect.bottom = paddle.rect.top
+            dy = -1
+        if(paddle_block and paddle_bottom):
+            self.rect.top = paddle.rect.bottom
+            dy = 1
 
+        self.position = self.rect.center
         self.direction = (dx, dy)
-        self.velocity = paddle.velocity
-
-
