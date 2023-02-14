@@ -15,12 +15,13 @@ WIDTH, HEIGHT = 960, 540
 DIMENSIONS = (WIDTH, HEIGHT)
 SCREEN = pygame.display.set_mode(DIMENSIONS)
 FPS = 60
-PLAYER_SOUND = pygame.mixer.Sound("pongblipb3.wav")
-ENEMY_SOUND = pygame.mixer.Sound("pongblipc5.wav")
+PLAYER_SOUND = pygame.mixer.Sound("pongblipc5.wav")
+ENEMY_SOUND = pygame.mixer.Sound("pongblipf5.wav")
+BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
 
 playerPaddle = PlayerPaddle(50, HEIGHT//2, PLAYER_SOUND)
 enemyPaddle = EnemyPaddle(WIDTH - 50, HEIGHT//2, ENEMY_SOUND)
-ball = Ball((0,0), (-1,1), WIDTH//2, HEIGHT//2)
+ball = Ball((0,0), (-1,1), WIDTH//2, HEIGHT//2, BALL_SOUND)
 score = Score()
 
 def draw_background():
