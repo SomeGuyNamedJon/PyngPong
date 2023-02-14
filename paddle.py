@@ -7,7 +7,7 @@ BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
 POINT_COLOR = (230, 255, 235)
 LOSS_COLOR = (230, 180, 200)
-BASE_SPEED = 3
+BASE_SPEED = 3.5
 
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, sound):
@@ -75,5 +75,4 @@ class EnemyPaddle(Paddle):
             
         self.position = (x, y+(self.speed*direction))
 
-        print("distance: {} , step: {}".format(distance, step))
         super().update(ball)
