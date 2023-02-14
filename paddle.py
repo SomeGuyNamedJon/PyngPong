@@ -10,9 +10,10 @@ LOSS_COLOR = (230, 180, 200)
 BASE_SPEED = 3
 
 class Paddle(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
+    def __init__(self, pos_x, pos_y, sound):
         pygame.sprite.Sprite.__init__(self)
         
+        self.sound = sound
         self.position = (pos_x, pos_y)
         self.position_old = self.position 
         self.image = pygame.Surface(PADDLE_DIMENSIONS)
@@ -31,6 +32,7 @@ class Paddle(pygame.sprite.Sprite):
 
     def handleCollision(self, ball):
         if(self.rect.colliderect(ball)):
+            self.sound.play()
             ball.paddleHit(self)
 
     def update(self, ball):
@@ -39,17 +41,14 @@ class Paddle(pygame.sprite.Sprite):
         self.handleBoundry(540)
 
 class PlayerPaddle(Paddle):
-    def __init__(self, pos_x, pos_y):
-        super().__init__(pos_x, pos_y)
-
     def update(self, mouse_pos, ball):
         (_, mouse_y) = mouse_pos
         self.position = (self.position[0], mouse_y)
         super().update(ball)
 
 class EnemyPaddle(Paddle):
-    def __init__(self, pos_x, pos_y):
-        super().__init__(pos_x, pos_y)
+    def __init__(self, pos_x, pos_y, sound):
+        super().__init__(pos_x, pos_y, sound)
         self.speed = BASE_SPEED
 
     def update(self, ball):
