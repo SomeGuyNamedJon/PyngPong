@@ -10,6 +10,7 @@ pygame.init()
 pygame.display.set_caption("Pλng")
 
 BG_COLOR = (50, 50, 50)
+BG_ELEM_COLOR = (70, 70, 70)
 WIDTH, HEIGHT = 960, 540
 DIMENSIONS = (WIDTH, HEIGHT)
 SCREEN = pygame.display.set_mode(DIMENSIONS)
@@ -25,8 +26,14 @@ score = Score()
 def draw_background():
     SCREEN.fill(BG_COLOR)
 
+def draw_divider(color, dot_size):
+    for i in range(0, HEIGHT, dot_size*2):
+        rect = pygame.Rect(WIDTH//2, i, dot_size, dot_size)
+        pygame.draw.rect(SCREEN, color, rect)
+
 def draw_board():
     score.draw(SCREEN, DIMENSIONS)
+    draw_divider(BG_ELEM_COLOR, 7)
     ball.draw(SCREEN)
     playerPaddle.draw(SCREEN)
     enemyPaddle.draw(SCREEN)
