@@ -32,7 +32,7 @@ def draw_divider(color, dot_size):
         pygame.draw.rect(SCREEN, color, rect)
 
 def draw_board():
-    score.draw(SCREEN, DIMENSIONS)
+    score.draw(SCREEN, DIMENSIONS, BG_ELEM_COLOR)
     draw_divider(BG_ELEM_COLOR, 7)
     ball.draw(SCREEN)
     playerPaddle.draw(SCREEN)
