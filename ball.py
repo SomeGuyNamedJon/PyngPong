@@ -4,7 +4,7 @@ pygame.init()
 
 BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
-SPEED = 1
+SPEED = 5
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self, velocity, direction, pos_x, pos_y):
@@ -26,24 +26,21 @@ class Ball(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
+    def resetBall(self, width, height):
+        self.position = (width//2, height//2)
+        self.direction = (-self.direction[0], -self.direction[1])
+
     def handleBoundry(self, dimensions, score):
         (width, height) = dimensions
-        (x, y) = self.position
-        (dx, dy) = self.direction
+        (x, y) = self.rect.center
         if y <= 0 or y >= height:
-            dy *= -1
+            self.direction = (self.direction[0], -self.direction[1])
         if x <= 0 or x >= width:
             if(x <= 0):
                 score.enemyPoint()
             else:
                 score.playerPoint()
-
-            dx *= -1
-            dy *= -1
-            (x, y) = (width//2, height//2)
-
-        self.position = (x, y)
-        self.direction = (dx, dy)
+            self.resetBall(width, height)
 
     def update(self, dimensions, score):
         self.handleBoundry(dimensions, score)
@@ -69,21 +66,19 @@ class Ball(pygame.sprite.Sprite):
 
     def paddleHit(self, paddle):
         self.reactHit()
-        (dx, dy) = self.direction
         collision_rect = self.rect.clip(paddle.rect)
 
         if collision_rect.width < collision_rect.height:
-            dx *= -1
+            self.direction = (-self.direction[0], self.direction[1])
             if self.rect.centerx < paddle.rect.centerx:
                 self.rect.right = paddle.rect.left
             else:
                 self.rect.left = paddle.rect.right
         else:
-            dy *= -1
+            self.direction = (self.direction[0], -self.direction[1])
             if self.rect.centery < paddle.rect.centery:
                 self.rect.bottom = paddle.rect.top
             else:
                 self.rect.top = paddle.rect.bottom
 
-        self.direction = (dx, dy)
         self.position = self.rect.center
