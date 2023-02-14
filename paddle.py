@@ -55,19 +55,25 @@ class EnemyPaddle(Paddle):
         (ball_x, ball_y) = ball.position
         (x, y) = self.position
         distance = x - ball_x
+        direction = 0
 
         if(distance <= 0):
             step = 0
         else:
             step = (BASE_SPEED/(distance+1)) * 10
 
+        if(self.rect.left < ball_x):
+            self.speed = 0
         if(self.rect.top < ball_y < self.rect.bottom):
             self.speed = BASE_SPEED
-        if(y > ball_y):
-            self.position = (x, y-self.speed)
+        elif(self.rect.top > ball_y):
+            direction = -1
             self.speed += step
-        if(y < ball_y):
-            self.position = (x, y+self.speed)
+        elif(self.rect.bottom < ball_y):
+            direction = 1
             self.speed += step
-        
+            
+        self.position = (x, y+(self.speed*direction))
+
+        print("distance: {} , step: {}".format(distance, step))
         super().update(ball)
