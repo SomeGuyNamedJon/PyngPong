@@ -19,6 +19,10 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.position
 
+        self.react_duration = 450
+        self.react_start_time = 0
+        self.reacted = False
+
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
@@ -46,8 +50,25 @@ class Ball(pygame.sprite.Sprite):
         self.velocity = tuple(py.multiply(self.direction, SPEED))
         self.position = tuple(py.add(self.position, self.velocity))
         self.rect.center = self.position
+        self.clearHit()
+
+    def clearHit(self):
+        current_time = pygame.time.get_ticks()
+        elapsed_time = current_time - self.react_start_time
+
+        if self.reacted and elapsed_time >= self.react_duration:
+            self.image.fill(BASE_COLOR)
+            self.reacted = False
+
+    def reactHit(self):
+        current_time = pygame.time.get_ticks()
+        if not self.reacted:
+            self.image.fill(HIT_COLOR)
+            self.react_start_time = current_time
+            self.reacted = True
 
     def paddleHit(self, paddle):
+        self.reactHit()
         (dx, dy) = self.direction
         
         paddle_left = (self.rect.right > paddle.rect.left and self.rect.left < paddle.rect.left)

@@ -21,6 +21,10 @@ class Paddle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.position
 
+        self.react_duration = 300
+        self.react_start_time = 0
+        self.reacted = False
+
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
@@ -30,13 +34,30 @@ class Paddle(pygame.sprite.Sprite):
         if(self.rect.bottom >= height):
             self.rect.bottom = height
 
+    def clearHit(self):
+        current_time = pygame.time.get_ticks()
+        elapsed_time = current_time - self.react_start_time
+
+        if self.reacted and elapsed_time >= self.react_duration:
+            self.image.fill(BASE_COLOR)
+            self.reacted = False
+
+    def reactHit(self):
+        current_time = pygame.time.get_ticks()
+        if not self.reacted:
+            self.sound.play()
+            self.image.fill(HIT_COLOR)
+            self.react_start_time = current_time
+            self.reacted = True
+
     def handleCollision(self, ball):
         if(self.rect.colliderect(ball)):
-            self.sound.play()
+            self.reactHit()
             ball.paddleHit(self)
 
     def update(self, ball):
         self.handleCollision(ball)
+        self.clearHit()
         self.rect.center = self.position
         self.handleBoundry(540)
 
