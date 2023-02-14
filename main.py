@@ -15,7 +15,7 @@ FPS = 60
 
 playerPaddle = PlayerPaddle(50, HEIGHT//2)
 enemyPaddle = EnemyPaddle(WIDTH - 50, HEIGHT//2)
-ball = Ball(5, (-1,1), WIDTH//2, HEIGHT//2) 
+ball = Ball((0,0), (-1,1), WIDTH//2, HEIGHT//2) 
 score = Score()
 
 def draw_background():

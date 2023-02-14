@@ -4,13 +4,14 @@ pygame.init()
 
 BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
+SPEED = 5
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self, velocity, direction, pos_x, pos_y):
         pygame.sprite.Sprite.__init__(self)
 
-        self.velocity = velocity
         self.direction = direction
+        self.velocity = (SPEED, SPEED)
         self.position = (pos_x,pos_y)
 
         self.image = pygame.Surface((30, 30))
@@ -39,32 +40,24 @@ class Ball(pygame.sprite.Sprite):
 
         self.position = (x, y)
         self.direction = (dx, dy)
+        self.velocity = (SPEED, SPEED)
 
     def update(self, dimensions, score):
         self.handleBoundry(dimensions, score)
-        vector = tuple([x*self.velocity for x in self.direction]) 
-        self.position = tuple(py.add(self.position, vector))
+        self.velocity = tuple([x*y for x,y in zip(self.direction, self.velocity)])
+        self.position = tuple(py.add(self.position, self.velocity))
         self.rect.center = self.position
-
 
     def paddleHit(self, paddle):
         (dx, dy) = self.direction
-        
-        if(self.rect.centery > paddle.rect.top and self.rect.centery < paddle.rect.bottom):
-            if(paddle.name == "player" and self.rect.centerx >= paddle.rect.right):
-                dx = 1
-                self.rect.left = paddle.rect.right
-            if(paddle.name == "enemy" and self.rect.centerx <= paddle.rect.left):
-                dx = -1
-                self.rect.right = paddle.rect.left
 
-        else:
-            if(self.rect.centery <= paddle.rect.centery):
-                dy = -1
-                self.rect.bottom = paddle.rect.top
+        if self.rect.top < paddle.rect.top:
+            dy = -1
+        if self.rect.bottom > paddle.rect.bottom:
+            dy = 1
 
-            if(self.rect.centery >= paddle.rect.centery):
-                dy = 1
-                self.rect.top = paddle.rect.bottom
-    
+        if self.rect.left < paddle.rect.left or self.rect.right > paddle.rect.right:
+            dx *= -1
+
         self.direction = (dx, dy)
+        self.velocity = tuple(py.add(self.velocity,paddle.velocity))
