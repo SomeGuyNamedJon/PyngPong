@@ -4,7 +4,7 @@ pygame.init()
 
 BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
-SPEED = 5
+SPEED = 1
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self, velocity, direction, pos_x, pos_y):
@@ -70,27 +70,20 @@ class Ball(pygame.sprite.Sprite):
     def paddleHit(self, paddle):
         self.reactHit()
         (dx, dy) = self.direction
-        
-        paddle_left = (self.rect.right > paddle.rect.left and self.rect.left < paddle.rect.left)
-        paddle_right = (self.rect.left < paddle.rect.right and self.rect.right > paddle.rect.right)
-        paddle_top = (self.rect.bottom > paddle.rect.top and self.rect.top < paddle.rect.top)
-        paddle_bottom = (self.rect.top < paddle.rect.bottom and self.rect.bottom > paddle.rect.bottom)
+        collision_rect = self.rect.clip(paddle.rect)
 
-        paddle_side = (paddle.rect.top < self.rect.centery < paddle.rect.bottom) 
-        paddle_block = (paddle.rect.left < self.rect.centerx < paddle.rect.right)
+        if collision_rect.width < collision_rect.height:
+            dx *= -1
+            if self.rect.centerx < paddle.rect.centerx:
+                self.rect.right = paddle.rect.left
+            else:
+                self.rect.left = paddle.rect.right
+        else:
+            dy *= -1
+            if self.rect.centery < paddle.rect.centery:
+                self.rect.bottom = paddle.rect.top
+            else:
+                self.rect.top = paddle.rect.bottom
 
-        if(paddle_side and paddle_left):
-            self.rect.right = paddle.rect.left
-            dx = -1
-        if(paddle_side and paddle_right):
-            self.rect.left = paddle.rect.right
-            dx = 1
-        if(paddle_block and paddle_top):
-            self.rect.bottom = paddle.rect.top
-            dy = -1
-        if(paddle_block and paddle_bottom):
-            self.rect.top = paddle.rect.bottom
-            dy = 1
-
-        self.position = self.rect.center
         self.direction = (dx, dy)
+        self.position = self.rect.center
