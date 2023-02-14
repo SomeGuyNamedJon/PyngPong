@@ -41,7 +41,7 @@ def draw_board(dimensions):
 
 def update_game(dimensions):
     mouse_pos = pygame.mouse.get_pos()
-    ball.update(dimensions, score)
+    ball.update(dimensions, SCREEN, score)
     playerPaddle.update(mouse_pos, ball, dimensions)
     enemyPaddle.update(ball, dimensions)
 
