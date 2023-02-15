@@ -82,10 +82,11 @@ class Ball(pygame.sprite.Sprite):
             else:
                 self.rect.left = paddle.rect.right
         else:
-            self.direction = (self.direction[0], -self.direction[1])
             if self.rect.centery < paddle.rect.centery:
                 self.rect.bottom = paddle.rect.top
+                self.direction = (self.direction[0], -abs(self.direction[1]))
             else:
                 self.rect.top = paddle.rect.bottom
+                self.direction = (self.direction[0], abs(self.direction[1]))
 
         self.position = self.rect.center
