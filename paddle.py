@@ -1,3 +1,4 @@
+import numpy as np
 import pygame
 pygame.init()
 
@@ -27,6 +28,9 @@ class Paddle(pygame.sprite.Sprite):
         self.react_duration = 300
         self.react_start_time = 0
         self.reacted = False
+
+        self.velocity = (0, 0)
+        self.position_old = self.position
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -60,7 +64,13 @@ class Paddle(pygame.sprite.Sprite):
             self.reactHit()
             ball.paddleHit(self)
 
+    def updateVelocity(self):
+        delta = pygame.time.get_ticks() - pygame.time.get_ticks() % 16.67
+        displacement = np.subtract(self.position, self.position_old)
+        self.velocity = tuple(displacement / delta)
+
     def update(self, ball, dimensions):
+        self.updateVelocity()
         self.handleCollision(ball)
         self.clearHit()
         self.rect.center = self.position
@@ -69,6 +79,7 @@ class Paddle(pygame.sprite.Sprite):
 class PlayerPaddle(Paddle):
     def update(self, mouse_pos, ball, dimensions):
         (_, mouse_y) = mouse_pos
+        self.position_old = self.position
         self.position = (self.position[0], mouse_y)
         super().update(ball, dimensions)
 
@@ -79,15 +90,15 @@ class EnemyPaddle(Paddle):
         self.follow_gap = BASE_FOLLOW
 
         ### AI DEBUG INFLUENCE INDICATORS ###
-        self.ai_top = pygame.Surface((200,5))
-        self.ai_top_rect = self.ai_top.get_rect()
-        self.ai_top.fill((255, 0, 0))
-        self.ai_top_rect.center = (pos_x, self.rect.top)
-        
-        self.ai_bottom = pygame.Surface((200,5))
-        self.ai_bottom_rect = self.ai_bottom.get_rect()
-        self.ai_bottom.fill((255, 0, 0))
-        self.ai_bottom_rect.center = (pos_x, self.rect.bottom)
+        #self.ai_top = pygame.Surface((200,5))
+        #self.ai_top_rect = self.ai_top.get_rect()
+        #self.ai_top.fill((255, 0, 0))
+        #self.ai_top_rect.center = (pos_x, self.rect.top)
+        #
+        #self.ai_bottom = pygame.Surface((200,5))
+        #self.ai_bottom_rect = self.ai_bottom.get_rect()
+        #self.ai_bottom.fill((255, 0, 0))
+        #self.ai_bottom_rect.center = (pos_x, self.rect.bottom)
         #####################################
 
     ### DEBUG DRAW ###
@@ -103,6 +114,7 @@ class EnemyPaddle(Paddle):
     def update(self, ball, dimensions):
         (width, height) = dimensions
         self.updateXPOS(width)
+        self.position_old = self.position
 
         (ball_x, ball_y) = ball.position
         distance = self.rect.left - ball_x
@@ -111,9 +123,9 @@ class EnemyPaddle(Paddle):
         base_follow = BASE_FOLLOW * smoothMap(height, 540, 1)
 
         ### AI DEBUG BOUNDS ###
-        self.ai_top_rect.right = self.ai_bottom_rect.right = self.rect.right
-        self.ai_top_rect.top = self.rect.centery - self.follow_gap
-        self.ai_bottom_rect.top = self.rect.centery + self.follow_gap
+        #self.ai_top_rect.right = self.ai_bottom_rect.right = self.rect.right
+        #self.ai_top_rect.top = self.rect.centery - self.follow_gap
+        #self.ai_bottom_rect.top = self.rect.centery + self.follow_gap
         #######################
     
         if(distance <= 0):
