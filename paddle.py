@@ -9,7 +9,7 @@ LOSS_COLOR = (230, 180, 200)
 BASE_SPEED = 10
 BASE_FOLLOW = 150
 
-def map_value_range(n, a, b):
+def smoothMap(n, a, b):
     k = (n/a) * b
     return k
 
@@ -78,7 +78,7 @@ class EnemyPaddle(Paddle):
         self.speed = BASE_SPEED
         self.follow_gap = BASE_FOLLOW
 
-        # AI INFLUENCE INDICATORS
+        ### AI DEBUG INFLUENCE INDICATORS ###
         self.ai_top = pygame.Surface((200,5))
         self.ai_top_rect = self.ai_top.get_rect()
         self.ai_top.fill((255, 0, 0))
@@ -88,11 +88,14 @@ class EnemyPaddle(Paddle):
         self.ai_bottom_rect = self.ai_bottom.get_rect()
         self.ai_bottom.fill((255, 0, 0))
         self.ai_bottom_rect.center = (pos_x, self.rect.bottom)
+        #####################################
 
+    ### DEBUG DRAW ###
     #def draw(self, screen):
     #    screen.blit(self.ai_top, self.ai_top_rect)
     #    screen.blit(self.ai_bottom, self.ai_bottom_rect)
     #    return super().draw(screen)
+    ##################
 
     def updateXPOS(self, width):
         self.position = (width - 50, self.position[1])
@@ -105,12 +108,13 @@ class EnemyPaddle(Paddle):
         distance = self.rect.left - ball_x
         direction = 0
         base_speed = BASE_SPEED + (1/width)*1000 + (-1/height)*100
-        base_follow = BASE_FOLLOW * map_value_range(height, 540, 1)
+        base_follow = BASE_FOLLOW * smoothMap(height, 540, 1)
 
-        # AI DEBUG BOUNDS
+        ### AI DEBUG BOUNDS ###
         self.ai_top_rect.right = self.ai_bottom_rect.right = self.rect.right
         self.ai_top_rect.top = self.rect.centery - self.follow_gap
         self.ai_bottom_rect.top = self.rect.centery + self.follow_gap
+        #######################
     
         if(distance <= 0):
             distance = 0
@@ -119,7 +123,7 @@ class EnemyPaddle(Paddle):
             step = (BASE_SPEED/(distance*10))
 
         
-        self.follow_gap = map_value_range(distance, width//2, base_follow)
+        self.follow_gap = smoothMap(distance, width//2, base_follow)
         
         if(self.rect.left < ball_x):
             self.follow_gap = base_follow
