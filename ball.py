@@ -26,31 +26,8 @@ class Ball(pygame.sprite.Sprite):
         self.react_start_time = 0
         self.reacted = False
 
-    ### DEGUG ###
-    #def drawArrow(self, screen, color, vector):
-    #    # Set the starting point of the arrow to the center of the ball
-    #    start = self.rect.center
-    #    # Calculate the end point of the arrow based on the given vector
-    #    end = start + np.array(vector, dtype=np.int32)
-    #    # Calculate the angle of the arrow in radians
-    #    angle = np.arctan2(vector[1], vector[0])
-    #    # Set the width and height of the arrow head
-    #    head_size = 10, 10
-    #    
-    #    # Draw the arrow on the screen
-    #    pygame.draw.line(screen, color, start, end, 2)
-    #    # Draw the arrow head
-    #    polygon_points = [(end[0], end[1]),
-    #                    (end[0] - head_size[0]*np.cos(angle - np.pi/6),
-    #                    end[1] - head_size[1]*np.sin(angle - np.pi/6)),
-    #                    (end[0] - head_size[0]*np.cos(angle + np.pi/6),
-    #                    end[1] - head_size[1]*np.sin(angle + np.pi/6))]
-    #    pygame.draw.polygon(screen, color, polygon_points)
-    #############
-
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-        #self.drawArrow(screen, (0, 200, 0), np.multiply(self.direction, 50))
 
     def resetBall(self, width, height):
         self.position = (width//2, height//2)
