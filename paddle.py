@@ -104,9 +104,8 @@ class EnemyPaddle(Paddle):
 
         distance = np.array(np.subtract(self.position, ball.position))
         direction = 0
-        #ball_angle = normalizeVector(tuple(distance))
-        #base_speed = abs(ball_angle[1]) * BASE_SPEED 
-        base_speed = BASE_SPEED + smoothMap(distance[0], width, BASE_SPEED) + smoothMap(distance[1], height, BASE_SPEED) 
+        ball_angle = normalizeVector(tuple(distance))
+        self.speed = BASE_SPEED * abs(ball_angle[1]) + smoothMap(abs(distance[1]), height, BASE_SPEED) 
         base_follow = BASE_FOLLOW * smoothMap(height, 540, 1)
 
         ### AI DEBUG BOUNDS ###
@@ -114,13 +113,6 @@ class EnemyPaddle(Paddle):
         #self.ai_top_rect.top = self.rect.centery - self.follow_gap
         #self.ai_bottom_rect.top = self.rect.centery + self.follow_gap
         #######################
-    
-        if(distance[0] <= 0):
-            distance[0] = 0
-            step = 0
-        else:
-            step = (BASE_SPEED/(distance[0]*10))
-
         
         self.follow_gap = smoothMap(distance[0], width//2, base_follow)
         (ball_x, ball_y) = ball.position
@@ -132,13 +124,11 @@ class EnemyPaddle(Paddle):
             self.follow_gap = 0
 
         if(self.rect.centery - self.follow_gap < ball_y < self.rect.centery + self.follow_gap):
-            self.speed = base_speed
+            direction = 0
         elif(self.rect.centery > ball_y):
             direction = -1
-            self.speed += step
         elif(self.rect.centery < ball_y):
             direction = 1
-            self.speed += step
 
         if(ball.direction[0] > 0):
             self.position = (self.position[0], self.position[1]+(self.speed*direction))
