@@ -68,7 +68,7 @@ class Ball(pygame.sprite.Sprite):
             self.reacted = False
 
     def reactHit(self):
-        self.speed += .25
+        self.speed += .05
         current_time = pygame.time.get_ticks()
         if not self.reacted:
             self.image.fill(HIT_COLOR)
