@@ -127,7 +127,7 @@ class Ball(pygame.sprite.Sprite):
 
     def paddleHit(self, paddle):
         self.reactHit()
-        self.handleCollision()
+        self.handleCollision(paddle)
         self.speed += .5
         self.changeAngle(paddle)
         self.position = self.rect.center
