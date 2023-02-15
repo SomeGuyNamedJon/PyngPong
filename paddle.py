@@ -1,4 +1,5 @@
 import numpy as np
+from custom_math import normalizeVector, smoothMap
 import pygame
 pygame.init()
 
@@ -9,10 +10,6 @@ POINT_COLOR = (230, 255, 235)
 LOSS_COLOR = (230, 180, 200)
 BASE_SPEED = 10
 BASE_FOLLOW = 150
-
-def smoothMap(n, a, b):
-    k = (n/a) * b
-    return k
 
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, sound):
@@ -120,6 +117,7 @@ class EnemyPaddle(Paddle):
         distance = self.rect.left - ball_x
         direction = 0
         base_speed = BASE_SPEED + (1/width)*1000 + (-1/height)*100
+        #base_speed = BASE_SPEED * abs(ball.direction[1])
         base_follow = BASE_FOLLOW * smoothMap(height, 540, 1)
 
         ### AI DEBUG BOUNDS ###

@@ -1,19 +1,11 @@
 import numpy as np
+from custom_math import normalizeVector
 import pygame
 pygame.init()
 
 BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
 SPEED = 7
-
-def normalizeVector(vector):
-    (vx, vy) = vector
-    u = np.sqrt(vx**2 + vy**2)
-    
-    if u == 0:
-        return (0, 0)
-    else:
-        return (vx/u, vy/u)
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self, velocity, direction, pos_x, pos_y, sound):
