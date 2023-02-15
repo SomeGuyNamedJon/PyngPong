@@ -14,6 +14,7 @@ class Ball(pygame.sprite.Sprite):
         self.velocity = velocity
         self.position = (pos_x,pos_y)
         self.sound = sound
+        self.speed = SPEED
 
         self.image = pygame.Surface((30, 30))
         self.image.fill(BASE_COLOR)
@@ -30,6 +31,7 @@ class Ball(pygame.sprite.Sprite):
     def resetBall(self, width, height):
         self.position = (width//2, height//2)
         self.direction = (-self.direction[0], -self.direction[1])
+        self.speed = SPEED
 
     def handleBoundry(self, dimensions, screen, score):
         (width, height) = dimensions
@@ -51,7 +53,7 @@ class Ball(pygame.sprite.Sprite):
 
     def update(self, dimensions, screen, score):
         self.handleBoundry(dimensions, screen, score)
-        self.velocity = tuple(py.multiply(self.direction, SPEED))
+        self.velocity = tuple(py.multiply(self.direction, self.speed))
         self.position = tuple(py.add(self.position, self.velocity))
         self.rect.center = self.position
         self.clearHit()
@@ -73,6 +75,7 @@ class Ball(pygame.sprite.Sprite):
 
     def paddleHit(self, paddle):
         self.reactHit()
+        self.speed += 0.25
         collision_rect = self.rect.clip(paddle.rect)
 
         if collision_rect.width < collision_rect.height:
