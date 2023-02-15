@@ -104,7 +104,7 @@ class EnemyPaddle(Paddle):
         (ball_x, ball_y) = ball.position
         distance = self.rect.left - ball_x
         direction = 0
-        base_speed = BASE_SPEED + (1/width)*100 + (-1/height)*100
+        base_speed = BASE_SPEED + (1/width)*1000 + (-1/height)*100
         base_follow = BASE_FOLLOW * map_value_range(height, 540, 1)
 
         # AI DEBUG BOUNDS
@@ -128,7 +128,6 @@ class EnemyPaddle(Paddle):
             self.follow_gap = 0
 
         if(self.rect.centery - self.follow_gap < ball_y < self.rect.centery + self.follow_gap):
-            direction = 0
             self.speed = base_speed
         elif(self.rect.centery > ball_y):
             direction = -1
