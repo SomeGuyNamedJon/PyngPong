@@ -89,10 +89,10 @@ class EnemyPaddle(Paddle):
         self.ai_bottom.fill((255, 0, 0))
         self.ai_bottom_rect.center = (pos_x, self.rect.bottom)
 
-    def draw(self, screen):
-        screen.blit(self.ai_top, self.ai_top_rect)
-        screen.blit(self.ai_bottom, self.ai_bottom_rect)
-        return super().draw(screen)
+    #def draw(self, screen):
+    #    screen.blit(self.ai_top, self.ai_top_rect)
+    #    screen.blit(self.ai_bottom, self.ai_bottom_rect)
+    #    return super().draw(screen)
 
     def updateXPOS(self, width):
         self.position = (width - 50, self.position[1])
