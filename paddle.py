@@ -109,8 +109,8 @@ class EnemyPaddle(Paddle):
 
         # AI DEBUG BOUNDS
         self.ai_top_rect.right = self.ai_bottom_rect.right = self.rect.right
-        self.ai_top_rect.top = self.rect.top - self.follow_gap
-        self.ai_bottom_rect.top = self.rect.bottom + self.follow_gap
+        self.ai_top_rect.top = self.rect.centery - self.follow_gap
+        self.ai_bottom_rect.top = self.rect.centery + self.follow_gap
     
         if(distance <= 0):
             distance = 0
@@ -127,13 +127,13 @@ class EnemyPaddle(Paddle):
         if(self.follow_gap <= 0):
             self.follow_gap = 0
 
-        if(self.rect.top - self.follow_gap < ball_y < self.rect.bottom + self.follow_gap):
+        if(self.rect.centery - self.follow_gap < ball_y < self.rect.centery + self.follow_gap):
             direction = 0
             self.speed = base_speed
-        elif(self.rect.top > ball_y):
+        elif(self.rect.centery > ball_y):
             direction = -1
             self.speed += step
-        elif(self.rect.bottom < ball_y):
+        elif(self.rect.centery < ball_y):
             direction = 1
             self.speed += step
 
