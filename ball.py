@@ -1,16 +1,25 @@
-import numpy as py
+import numpy as np
 import pygame
 pygame.init()
 
 BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
-SPEED = 5
+SPEED = 7
+
+def normalizeVector(vector):
+    (vx, vy) = vector
+    u = np.sqrt(vx**2 + vy**2)
+    
+    if u == 0:
+        return (0, 0)
+    else:
+        return (vx/u, vy/u)
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self, velocity, direction, pos_x, pos_y, sound):
         pygame.sprite.Sprite.__init__(self)
 
-        self.direction = direction
+        self.direction = normalizeVector(direction)
         self.velocity = velocity
         self.position = (pos_x,pos_y)
         self.sound = sound
@@ -25,8 +34,31 @@ class Ball(pygame.sprite.Sprite):
         self.react_start_time = 0
         self.reacted = False
 
+    ### DEGUG ###
+    def drawArrow(self, screen, color, vector):
+        # Set the starting point of the arrow to the center of the ball
+        start = self.rect.center
+        # Calculate the end point of the arrow based on the given vector
+        end = start + np.array(vector, dtype=np.int32)
+        # Calculate the angle of the arrow in radians
+        angle = np.arctan2(vector[1], vector[0])
+        # Set the width and height of the arrow head
+        head_size = 10, 10
+        
+        # Draw the arrow on the screen
+        pygame.draw.line(screen, color, start, end, 2)
+        # Draw the arrow head
+        polygon_points = [(end[0], end[1]),
+                        (end[0] - head_size[0]*np.cos(angle - np.pi/6),
+                        end[1] - head_size[1]*np.sin(angle - np.pi/6)),
+                        (end[0] - head_size[0]*np.cos(angle + np.pi/6),
+                        end[1] - head_size[1]*np.sin(angle + np.pi/6))]
+        pygame.draw.polygon(screen, color, polygon_points)
+    #############
+
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        self.drawArrow(screen, (0, 200, 0), np.multiply(self.direction, 50))
 
     def resetBall(self, width, height):
         self.position = (width//2, height//2)
@@ -53,8 +85,8 @@ class Ball(pygame.sprite.Sprite):
 
     def update(self, dimensions, screen, score):
         self.handleBoundry(dimensions, screen, score)
-        self.velocity = tuple(py.multiply(self.direction, self.speed))
-        self.position = tuple(py.add(self.position, self.velocity))
+        self.velocity = tuple(np.multiply(self.direction, self.speed))
+        self.position = tuple(np.add(self.position, self.velocity))
         self.rect.center = self.position
         self.clearHit()
 
@@ -72,6 +104,11 @@ class Ball(pygame.sprite.Sprite):
             self.image.fill(HIT_COLOR)
             self.react_start_time = current_time
             self.reacted = True
+
+    def changeAngle(self, paddle):
+        influence_vector = normalizeVector(tuple(np.subtract(self.position, paddle.position)))
+        new_vector = tuple(np.add(self.direction, influence_vector))
+        self.direction = normalizeVector(new_vector)
 
     def paddleHit(self, paddle):
         self.reactHit()
@@ -92,4 +129,5 @@ class Ball(pygame.sprite.Sprite):
                 self.rect.top = paddle.rect.bottom
                 self.direction = (self.direction[0], abs(self.direction[1]))
 
+        self.changeAngle(paddle)
         self.position = self.rect.center
