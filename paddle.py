@@ -137,7 +137,7 @@ class EnemyPaddle(Paddle):
             direction = 1
             self.speed += step
 
-        if(distance < width//4 and ball.direction[0] == 1):
+        if(distance < width//3 and ball.direction[0] > 0):
             self.position = (self.position[0], self.position[1]+(self.speed*direction))
 
         super().update(ball, dimensions)
