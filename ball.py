@@ -99,6 +99,7 @@ class Ball(pygame.sprite.Sprite):
             self.reacted = False
 
     def reactHit(self):
+        self.speed += .25
         current_time = pygame.time.get_ticks()
         if not self.reacted:
             self.image.fill(HIT_COLOR)
@@ -106,13 +107,13 @@ class Ball(pygame.sprite.Sprite):
             self.reacted = True
 
     def changeAngle(self, paddle):
-        influence_vector = normalizeVector(tuple(np.subtract(self.position, paddle.position)))
-        new_vector = tuple(np.add(self.direction, influence_vector))
+        influence_vector = tuple(np.subtract(self.position, paddle.position))
+        new_vector = tuple(np.add(self.velocity, influence_vector))
         self.direction = normalizeVector(new_vector)
 
     def paddleHit(self, paddle):
         self.reactHit()
-        self.speed += 0.25
+        self.speed += 1
         collision_rect = self.rect.clip(paddle.rect)
 
         if collision_rect.width < collision_rect.height:
