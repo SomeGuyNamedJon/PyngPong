@@ -81,7 +81,6 @@ class EnemyPaddle(Paddle):
         #self.ai_top_rect = self.ai_top.get_rect()
         #self.ai_top.fill((255, 0, 0))
         #self.ai_top_rect.center = (pos_x, self.rect.top)
-        #
         #self.ai_bottom = pygame.Surface((200,5))
         #self.ai_bottom_rect = self.ai_bottom.get_rect()
         #self.ai_bottom.fill((255, 0, 0))
@@ -106,28 +105,19 @@ class EnemyPaddle(Paddle):
         direction = 0
         ball_angle = normalizeVector(tuple(distance))
         self.speed = BASE_SPEED * abs(ball_angle[1]) + smoothMap(abs(distance[1]), height, BASE_SPEED) 
-        base_follow = BASE_FOLLOW * smoothMap(height, 540, 1)
+        self.follow_gap = smoothMap(distance[0], width//2, BASE_FOLLOW * smoothMap(height, 540, 1))
 
         ### AI DEBUG BOUNDS ###
         #self.ai_top_rect.right = self.ai_bottom_rect.right = self.rect.right
         #self.ai_top_rect.top = self.rect.centery - self.follow_gap
         #self.ai_bottom_rect.top = self.rect.centery + self.follow_gap
         #######################
-        
-        self.follow_gap = smoothMap(distance[0], width//2, base_follow)
-        (ball_x, ball_y) = ball.position
-        
-        if(self.rect.left < ball_x):
-            self.follow_gap = base_follow
-            self.speed = 0
-        if(self.follow_gap <= 0):
-            self.follow_gap = 0
 
-        if(self.rect.centery - self.follow_gap < ball_y < self.rect.centery + self.follow_gap):
+        if(self.rect.centery - self.follow_gap < ball.rect.centery < self.rect.centery + self.follow_gap):
             direction = 0
-        elif(self.rect.centery > ball_y):
+        elif(self.rect.centery > ball.rect.centery):
             direction = -1
-        elif(self.rect.centery < ball_y):
+        elif(self.rect.centery < ball.rect.centery):
             direction = 1
 
         if(ball.direction[0] > 0):
