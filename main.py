@@ -47,6 +47,7 @@ def update_game(dimensions):
     enemyPaddle.update(ball, dimensions)
 
 def main():
+    pygame.mouse.set_visible(False)
     clock = pygame.time.Clock()
     run = True
     while run:
