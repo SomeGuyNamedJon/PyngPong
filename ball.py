@@ -107,7 +107,14 @@ class Ball(pygame.sprite.Sprite):
             self.reacted = True
 
     def changeAngle(self, paddle):
-        influence_vector = tuple(np.subtract(self.position, paddle.position))
+        if(self.rect.centerx < paddle.rect.centerx):
+            center_of_influence = (paddle.rect.right, paddle.rect.centery)
+        elif(self.rect.centerx > paddle.rect.centerx):
+            center_of_influence = (paddle.rect.left, paddle.rect.centery)
+        else:
+            center_of_influence = paddle.position
+
+        influence_vector = tuple(np.subtract(self.position, center_of_influence))
         new_vector = tuple(np.add(self.velocity, influence_vector))
         self.direction = normalizeVector(new_vector)
 
