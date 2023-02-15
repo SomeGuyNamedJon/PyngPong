@@ -21,7 +21,7 @@ BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
 
 playerPaddle = PlayerPaddle(50, HEIGHT//2, PLAYER_SOUND)
 enemyPaddle = EnemyPaddle(WIDTH - 50, HEIGHT//2, ENEMY_SOUND)
-ball = Ball((0,0), (-1,1), WIDTH//2, HEIGHT//2, BALL_SOUND)
+ball = Ball((0,0), (-1,1.5), WIDTH//2, HEIGHT//2, BALL_SOUND)
 score = Score()
 
 def draw_background():
