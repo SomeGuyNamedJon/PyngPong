@@ -1,4 +1,3 @@
-import math
 import pygame
 pygame.init()
 
@@ -61,15 +60,11 @@ class Paddle(pygame.sprite.Sprite):
             self.reactHit()
             ball.paddleHit(self)
 
-    def updateXPOS(self, dimensions):
-        pass
-
     def update(self, ball, dimensions):
         self.handleCollision(ball)
         self.clearHit()
         self.rect.center = self.position
         self.handleBoundry(dimensions)
-        self.updateXPOS(dimensions)
 
 class PlayerPaddle(Paddle):
     def update(self, mouse_pos, ball, dimensions):
@@ -104,6 +99,8 @@ class EnemyPaddle(Paddle):
         self.position = (width - 50, self.position[1])
 
     def update(self, ball, dimensions):
+        self.updateXPOS(dimensions)
+
         (ball_x, ball_y) = ball.position
         distance = self.rect.left - ball_x
         direction = 0
