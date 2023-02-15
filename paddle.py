@@ -7,7 +7,7 @@ HIT_COLOR = (255,255,255)
 POINT_COLOR = (230, 255, 235)
 LOSS_COLOR = (230, 180, 200)
 BASE_SPEED = 10
-BASE_FOLLOW = 300
+BASE_FOLLOW = 275
 
 def map_value_range(n, a, b):
     k = (n/a) * b
