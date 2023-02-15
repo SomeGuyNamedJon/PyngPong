@@ -1,4 +1,4 @@
-import time
+import math
 import pygame
 pygame.init()
 
@@ -7,7 +7,12 @@ BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
 POINT_COLOR = (230, 255, 235)
 LOSS_COLOR = (230, 180, 200)
-BASE_SPEED = 3.5
+BASE_SPEED = 5
+BASE_FOLLOW = 150
+
+def map_value_range(n, a, b):
+    k = (n/a) * b
+    return k
 
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, sound):
@@ -26,6 +31,7 @@ class Paddle(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+
 
     def handleBoundry(self, dimensions):
         (_, height) = dimensions
@@ -75,6 +81,23 @@ class EnemyPaddle(Paddle):
     def __init__(self, pos_x, pos_y, sound):
         super().__init__(pos_x, pos_y, sound)
         self.speed = BASE_SPEED
+        self.follow_gap = BASE_FOLLOW
+
+        # AI INFLUENCE INDICATORS
+        self.ai_top = pygame.Surface((200,5))
+        self.ai_top_rect = self.ai_top.get_rect()
+        self.ai_top.fill((255, 0, 0))
+        self.ai_top_rect.center = (pos_x, self.rect.top)
+        
+        self.ai_bottom = pygame.Surface((200,5))
+        self.ai_bottom_rect = self.ai_bottom.get_rect()
+        self.ai_bottom.fill((255, 0, 0))
+        self.ai_bottom_rect.center = (pos_x, self.rect.bottom)
+
+    def draw(self, screen):
+        screen.blit(self.ai_top, self.ai_top_rect)
+        screen.blit(self.ai_bottom, self.ai_bottom_rect)
+        return super().draw(screen)
 
     def updateXPOS(self, dimensions):
         (width, _) = dimensions
@@ -82,18 +105,30 @@ class EnemyPaddle(Paddle):
 
     def update(self, ball, dimensions):
         (ball_x, ball_y) = ball.position
-        (x, y) = self.position
-        distance = x - ball_x
+        distance = self.rect.left - ball_x
         direction = 0
 
+        # AI DEBUG BOUNDS
+        self.ai_top_rect.right = self.ai_bottom_rect.right = self.rect.right
+        self.ai_top_rect.top = self.rect.top - self.follow_gap
+        self.ai_bottom_rect.top = self.rect.bottom + self.follow_gap
+    
         if(distance <= 0):
+            distance = 0
             step = 0
         else:
-            step = (BASE_SPEED/(distance+1)) * 10
+            step = (BASE_SPEED/(distance*10))
 
+        if(distance < 750):
+            self.follow_gap = map_value_range(distance, 750, BASE_FOLLOW)
+        
         if(self.rect.left < ball_x):
+            self.follow_gap = BASE_FOLLOW
             self.speed = 0
-        if(self.rect.top < ball_y < self.rect.bottom):
+        if(self.follow_gap <= 0):
+            self.follow_gap = 0
+
+        if(self.rect.top - self.follow_gap < ball_y < self.rect.bottom + self.follow_gap):
             self.speed = BASE_SPEED
         elif(self.rect.top > ball_y):
             direction = -1
@@ -101,7 +136,7 @@ class EnemyPaddle(Paddle):
         elif(self.rect.bottom < ball_y):
             direction = 1
             self.speed += step
-            
-        self.position = (x, y+(self.speed*direction))
+
+        self.position = (self.position[0], self.position[1]+(self.speed*direction))
 
         super().update(ball, dimensions)
