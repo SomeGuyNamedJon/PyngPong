@@ -110,9 +110,7 @@ class Ball(pygame.sprite.Sprite):
         new_vector = tuple(np.add(self.velocity, influence_vector))
         self.direction = normalizeVector(new_vector)
 
-    def paddleHit(self, paddle):
-        self.reactHit()
-        self.speed += 1
+    def handleCollision(self, paddle):
         collision_rect = self.rect.clip(paddle.rect)
 
         if collision_rect.width < collision_rect.height:
@@ -124,10 +122,12 @@ class Ball(pygame.sprite.Sprite):
         else:
             if self.rect.centery < paddle.rect.centery:
                 self.rect.bottom = paddle.rect.top
-                self.direction = (self.direction[0], -abs(self.direction[1]))
             else:
                 self.rect.top = paddle.rect.bottom
-                self.direction = (self.direction[0], abs(self.direction[1]))
 
+    def paddleHit(self, paddle):
+        self.reactHit()
+        self.handleCollision()
+        self.speed += .5
         self.changeAngle(paddle)
         self.position = self.rect.center
