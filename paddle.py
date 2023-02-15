@@ -26,9 +26,6 @@ class Paddle(pygame.sprite.Sprite):
         self.react_start_time = 0
         self.reacted = False
 
-        self.velocity = (0, 0)
-        self.position_old = self.position
-
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
@@ -61,13 +58,7 @@ class Paddle(pygame.sprite.Sprite):
             self.reactHit()
             ball.paddleHit(self)
 
-    def updateVelocity(self):
-        delta = pygame.time.get_ticks() - pygame.time.get_ticks() % 16.67
-        displacement = np.subtract(self.position, self.position_old)
-        self.velocity = tuple(displacement / delta)
-
     def update(self, ball, dimensions):
-        self.updateVelocity()
         self.handleCollision(ball)
         self.clearHit()
         self.rect.center = self.position
@@ -76,7 +67,6 @@ class Paddle(pygame.sprite.Sprite):
 class PlayerPaddle(Paddle):
     def update(self, mouse_pos, ball, dimensions):
         (_, mouse_y) = mouse_pos
-        self.position_old = self.position
         self.position = (self.position[0], mouse_y)
         super().update(ball, dimensions)
 
@@ -111,13 +101,12 @@ class EnemyPaddle(Paddle):
     def update(self, ball, dimensions):
         (width, height) = dimensions
         self.updateXPOS(width)
-        self.position_old = self.position
 
-        (ball_x, ball_y) = ball.position
-        distance = self.rect.left - ball_x
+        distance = np.array(np.subtract(self.position, ball.position))
         direction = 0
-        base_speed = BASE_SPEED + (1/width)*1000 + (-1/height)*100
-        #base_speed = BASE_SPEED * abs(ball.direction[1])
+        #ball_angle = normalizeVector(tuple(distance))
+        #base_speed = abs(ball_angle[1]) * BASE_SPEED 
+        base_speed = BASE_SPEED + smoothMap(distance[0], width, BASE_SPEED) + smoothMap(distance[1], height, BASE_SPEED) 
         base_follow = BASE_FOLLOW * smoothMap(height, 540, 1)
 
         ### AI DEBUG BOUNDS ###
@@ -126,14 +115,15 @@ class EnemyPaddle(Paddle):
         #self.ai_bottom_rect.top = self.rect.centery + self.follow_gap
         #######################
     
-        if(distance <= 0):
-            distance = 0
+        if(distance[0] <= 0):
+            distance[0] = 0
             step = 0
         else:
-            step = (BASE_SPEED/(distance*10))
+            step = (BASE_SPEED/(distance[0]*10))
 
         
-        self.follow_gap = smoothMap(distance, width//2, base_follow)
+        self.follow_gap = smoothMap(distance[0], width//2, base_follow)
+        (ball_x, ball_y) = ball.position
         
         if(self.rect.left < ball_x):
             self.follow_gap = base_follow
