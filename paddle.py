@@ -7,7 +7,7 @@ HIT_COLOR = (255,255,255)
 POINT_COLOR = (230, 255, 235)
 LOSS_COLOR = (230, 180, 200)
 BASE_SPEED = 10
-BASE_FOLLOW = 275
+BASE_FOLLOW = 150
 
 def map_value_range(n, a, b):
     k = (n/a) * b
@@ -137,7 +137,7 @@ class EnemyPaddle(Paddle):
             direction = 1
             self.speed += step
 
-        if(distance < width//3 and ball.direction[0] > 0):
+        if(ball.direction[0] > 0):
             self.position = (self.position[0], self.position[1]+(self.speed*direction))
 
         super().update(ball, dimensions)
