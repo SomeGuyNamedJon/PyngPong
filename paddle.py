@@ -6,8 +6,8 @@ BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
 POINT_COLOR = (230, 255, 235)
 LOSS_COLOR = (230, 180, 200)
-BASE_SPEED = 5
-BASE_FOLLOW = 150
+BASE_SPEED = 10
+BASE_FOLLOW = 300
 
 def map_value_range(n, a, b):
     k = (n/a) * b
@@ -94,16 +94,18 @@ class EnemyPaddle(Paddle):
         screen.blit(self.ai_bottom, self.ai_bottom_rect)
         return super().draw(screen)
 
-    def updateXPOS(self, dimensions):
-        (width, _) = dimensions
+    def updateXPOS(self, width):
         self.position = (width - 50, self.position[1])
 
     def update(self, ball, dimensions):
-        self.updateXPOS(dimensions)
+        (width, height) = dimensions
+        self.updateXPOS(width)
 
         (ball_x, ball_y) = ball.position
         distance = self.rect.left - ball_x
         direction = 0
+        base_speed = BASE_SPEED + (1/width)*100 + (-1/height)*100
+        base_follow = BASE_FOLLOW * map_value_range(height, 540, 1)
 
         # AI DEBUG BOUNDS
         self.ai_top_rect.right = self.ai_bottom_rect.right = self.rect.right
@@ -116,17 +118,18 @@ class EnemyPaddle(Paddle):
         else:
             step = (BASE_SPEED/(distance*10))
 
-        if(distance < 750):
-            self.follow_gap = map_value_range(distance, 750, BASE_FOLLOW)
+        
+        self.follow_gap = map_value_range(distance, width//2, base_follow)
         
         if(self.rect.left < ball_x):
-            self.follow_gap = BASE_FOLLOW
+            self.follow_gap = base_follow
             self.speed = 0
         if(self.follow_gap <= 0):
             self.follow_gap = 0
 
         if(self.rect.top - self.follow_gap < ball_y < self.rect.bottom + self.follow_gap):
-            self.speed = BASE_SPEED
+            direction = 0
+            self.speed = base_speed
         elif(self.rect.top > ball_y):
             direction = -1
             self.speed += step
@@ -134,6 +137,7 @@ class EnemyPaddle(Paddle):
             direction = 1
             self.speed += step
 
-        self.position = (self.position[0], self.position[1]+(self.speed*direction))
+        if(distance < width//4 and ball.direction[0] == 1):
+            self.position = (self.position[0], self.position[1]+(self.speed*direction))
 
         super().update(ball, dimensions)
