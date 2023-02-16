@@ -58,7 +58,7 @@ class Paddle(pygame.sprite.Sprite):
             self.reactHit()
             ball.paddleHit(self)
 
-    def move(self, ball, dimensions):
+    def move(self, *_):
         pass
 
     def update(self, ball, dimensions):
@@ -68,39 +68,43 @@ class Paddle(pygame.sprite.Sprite):
         self.rect.center = self.position
         self.handleBoundry(dimensions)
 
-class PlayerPaddle(Paddle):
+class PaddlePlayer(Paddle):
     def move(self, *_):
         mouse_y = pygame.mouse.get_pos()[1]
         self.position = (self.position[0], mouse_y)
 
-class EnemyPaddle(Paddle):
+class PaddleAI(Paddle):
     def __init__(self, pos_x, pos_y, sound):
         super().__init__(pos_x, pos_y, sound)
         self.speed = BASE_SPEED
         self.follow_gap = BASE_FOLLOW
 
     def updateXPOS(self, width):
-        self.position = (width - 50, self.position[1])
+        if(self.position[0] == 50):
+            pass
+        else:
+            self.position = (width - 50, self.position[1])
 
     def getDirection(self, ball):
-        if(self.rect.centery - self.follow_gap < ball.rect.centery < self.rect.centery + self.follow_gap):
-            return 0
-        elif(self.rect.centery > ball.rect.centery):
-            return -1
-        elif(self.rect.centery < ball.rect.centery):
-            return 1
+        if(not (self.rect.centery - self.follow_gap < ball.rect.centery < self.rect.centery + self.follow_gap)):
+            if(self.rect.centery > ball.rect.centery):
+                return -1
+            if(self.rect.centery < ball.rect.centery):
+                return 1
+        return 0
     
-    def updateSpeedAndFollow(self, ball, dimensions):
+    def updateAI(self, ball, dimensions):
         (width, height) = dimensions
+        direction = self.getDirection(ball)
         distance = np.array(np.subtract(self.position, ball.position))
         ball_angle = normalizeVector(tuple(distance))
         self.speed = BASE_SPEED * abs(ball_angle[1]) + smoothMap(abs(distance[1]), height, BASE_SPEED) 
         self.follow_gap = smoothMap(distance[0], width//2, BASE_FOLLOW * smoothMap(height, 540, 1))
+        
+        if(abs(distance[0]) > 0):
+            self.position = (self.position[0], self.position[1]+(self.speed*direction))
 
     def move(self, ball, dimensions):
         (width, _) = dimensions
         self.updateXPOS(width)
-        direction = self.getDirection(ball)
-        self.updateSpeedAndFollow(ball, dimensions)
-        if(ball.direction[0] > 0):
-            self.position = (self.position[0], self.position[1]+(self.speed*direction))
+        self.updateAI(ball, dimensions)
