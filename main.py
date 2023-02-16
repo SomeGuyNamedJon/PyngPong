@@ -15,13 +15,13 @@ WIDTH, HEIGHT = 960, 540
 DIMENSIONS = (WIDTH, HEIGHT)
 SCREEN = pygame.display.set_mode(DIMENSIONS)
 FPS = 60
-PLAYER_SOUND = pygame.mixer.Sound("pongblipc5.wav")
-ENEMY_SOUND = pygame.mixer.Sound("pongblipf5.wav")
+PADDLE_A_SOUND = pygame.mixer.Sound("pongblipc5.wav")
+PADDLE_B_SOUND = pygame.mixer.Sound("pongblipf5.wav")
 BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
 
-playerPaddle = PaddlePlayer(50, HEIGHT//2, PLAYER_SOUND)
-AI_Paddle = PaddleAI(50, HEIGHT//2, PLAYER_SOUND)
-enemyPaddle = PaddleAI(WIDTH - 50, HEIGHT//2, ENEMY_SOUND)
+playerPaddle = PaddlePlayer(50, HEIGHT//2, PADDLE_A_SOUND)
+AI_Paddle = PaddleAI(50, HEIGHT//2, PADDLE_A_SOUND)
+enemyPaddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
 ball = Ball((0,0), (-1,1), WIDTH//2, HEIGHT//2, BALL_SOUND)
 score = Score()
 
