@@ -3,6 +3,7 @@ from custom_math import normalizeVector, smoothMap
 import pygame
 pygame.init()
 
+INITIAL_HEIGHT = 540
 PADDLE_DIMENSIONS = ((50, 175))
 BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
@@ -93,15 +94,21 @@ class PaddleAI(Paddle):
                 return 1
         return 0
     
+    def getDistance(self, ball, width):
+        distance = np.array(np.subtract(self.position, ball.position))
+        if(self.rect.centerx < width//2):
+            distance = np.multiply(distance, -1)
+        return distance
+    
     def updateAI(self, ball, dimensions):
         (width, height) = dimensions
         direction = self.getDirection(ball)
-        distance = np.array(np.subtract(self.position, ball.position))
+        distance = self.getDistance(ball, width)
         ball_angle = normalizeVector(tuple(distance))
         self.speed = BASE_SPEED * abs(ball_angle[1]) + smoothMap(abs(distance[1]), height, BASE_SPEED) 
-        self.follow_gap = smoothMap(distance[0], width//2, BASE_FOLLOW * smoothMap(height, 540, 1))
+        self.follow_gap = smoothMap(distance[0], width//2, BASE_FOLLOW * smoothMap(height, INITIAL_HEIGHT, 1))
         
-        if(abs(distance[0]) > 0):
+        if(distance[0] > 0):
             self.position = (self.position[0], self.position[1]+(self.speed*direction))
 
     def move(self, ball, dimensions):
