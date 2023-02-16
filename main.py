@@ -1,6 +1,6 @@
 import time
 import pygame
-from paddle import PlayerPaddle, EnemyPaddle
+from paddle import PaddlePlayer, PaddleAI
 from ball import Ball
 from scorecard import Score
 import os
@@ -19,8 +19,9 @@ PLAYER_SOUND = pygame.mixer.Sound("pongblipc5.wav")
 ENEMY_SOUND = pygame.mixer.Sound("pongblipf5.wav")
 BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
 
-playerPaddle = PlayerPaddle(50, HEIGHT//2, PLAYER_SOUND)
-enemyPaddle = EnemyPaddle(WIDTH - 50, HEIGHT//2, ENEMY_SOUND)
+playerPaddle = PaddlePlayer(50, HEIGHT//2, PLAYER_SOUND)
+AI_Paddle = PaddleAI(50, HEIGHT//2, PLAYER_SOUND)
+enemyPaddle = PaddleAI(WIDTH - 50, HEIGHT//2, ENEMY_SOUND)
 ball = Ball((0,0), (-1,1), WIDTH//2, HEIGHT//2, BALL_SOUND)
 score = Score()
 
@@ -37,12 +38,12 @@ def draw_board(dimensions):
     score.draw(SCREEN, dimensions, BG_ELEM_COLOR)
     draw_divider(BG_ELEM_COLOR, dimensions, 7)
     ball.draw(SCREEN)
-    playerPaddle.draw(SCREEN)
+    AI_Paddle.draw(SCREEN)
     enemyPaddle.draw(SCREEN)
 
 def update_game(dimensions):
     ball.update(dimensions, SCREEN, score)
-    playerPaddle.update(ball, dimensions)
+    AI_Paddle.update(ball, dimensions)
     enemyPaddle.update(ball, dimensions)
 
 def main():
