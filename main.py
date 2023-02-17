@@ -55,7 +55,7 @@ def draw_speed(ball):
     text = FONT.render(string, True, color)
     text = pygame.transform.scale(text, (90, 50))
     rect = text.get_rect()
-    rect.center = (width // 2, 60)
+    rect.center = (width // 2 + 5, 60)
     pygame.draw.rect(SCREEN, BG_COLOR, rect.inflate(0,15))
     SCREEN.blit(text, rect)
 
