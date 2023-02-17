@@ -86,7 +86,7 @@ class PaddleAI(Paddle):
         else:
             self.position = (width - 50, self.position[1])
 
-    def getDirection(self, ball):
+    def getPaddleDirection(self, ball):
         if(not (self.rect.centery - self.follow_gap < ball.rect.centery < self.rect.centery + self.follow_gap)):
             if(self.rect.centery > ball.rect.centery):
                 return -1
@@ -94,21 +94,20 @@ class PaddleAI(Paddle):
                 return 1
         return 0
     
-    def getDistance(self, ball, width):
-        distance = np.array(np.subtract(self.position, ball.position))
-        if(self.rect.centerx < width//2):
-            distance = np.multiply(distance, -1)
-        return distance
+    def getDistance(self, ball):
+        return np.array(np.subtract(self.position, ball.position))
     
     def updateAI(self, ball, dimensions):
         (width, height) = dimensions
-        direction = self.getDirection(ball)
-        distance = self.getDistance(ball, width)
+        direction = self.getPaddleDirection(ball)
+        distance = self.getDistance(ball)
         ball_angle = normalizeVector(tuple(distance))
+        if(self.rect.centerx < width//2):
+            distance = np.multiply(distance, -1)
         self.speed = BASE_SPEED * abs(ball_angle[1]) + smoothMap(abs(distance[1]), height, BASE_SPEED) 
         self.follow_gap = smoothMap(distance[0], width//2, BASE_FOLLOW * smoothMap(height, INITIAL_HEIGHT, 1))
         
-        if(distance[0] > 0):
+        if(distance[0] > 0 and (np.copysign(1, ball_angle[0]) == np.copysign(1, ball.direction[0]))):
             self.position = (self.position[0], self.position[1]+(self.speed*direction))
 
     def move(self, ball, dimensions):
