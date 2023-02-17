@@ -8,7 +8,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 os.chdir("assets")
 
 pygame.init()
-pygame.display.set_caption("Pλng")
+pygame.display.set_caption("PλngPong")
 
 BG_COLOR = (50, 50, 50)
 BG_ELEM_COLOR = (70, 70, 70)
