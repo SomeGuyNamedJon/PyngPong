@@ -34,7 +34,7 @@ class Ball(pygame.sprite.Sprite):
         self.direction = (-self.direction[0], -self.direction[1])
         self.speed = SPEED
 
-    def handleBoundry(self, dimensions, screen, score):
+    def handleBoundry(self, dimensions, screen, scorecard):
         (width, height) = dimensions
         self.rect.clamp_ip(screen.get_rect())
         if self.rect.top == 0 or self.rect.bottom == height:
@@ -43,9 +43,9 @@ class Ball(pygame.sprite.Sprite):
             self.direction = (self.direction[0], -self.direction[1])
         if self.rect.left <= 0 or self.rect.right >= width:
             if(self.rect.left <= 0):
-                score.score('B')
+                scorecard.score('B')
             else:
-                score.score('A')
+                scorecard.score('A')
             self.resetBall(width, height)
 
         #if the ball somehow ends up outside the top or bottom bounds, just reset 

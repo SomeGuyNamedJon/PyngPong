@@ -2,7 +2,7 @@ import time
 import pygame
 from paddle import PaddlePlayer, PaddleAI
 from ball import Ball
-from scorecard import Score
+from scorecard import ScoreCard
 import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 os.chdir("assets")
@@ -25,7 +25,7 @@ playerPaddle = PaddlePlayer(50, HEIGHT//2, PADDLE_A_SOUND)
 AI_Paddle = PaddleAI(50, HEIGHT//2, PADDLE_A_SOUND)
 enemyPaddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
 ball = Ball((0,0), (-1,1), WIDTH//2, HEIGHT//2, BALL_SOUND)
-score = Score(BG_ELEM_COLOR, FONT)
+score = ScoreCard(BG_ELEM_COLOR, FONT)
 
 def draw_background():
     SCREEN.fill(BG_COLOR)
