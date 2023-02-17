@@ -64,12 +64,12 @@ def draw_board(dimensions):
     draw_divider(BG_ELEM_COLOR, dimensions, 7)
     draw_speed(ball)
     ball.draw(SCREEN)
-    playerPaddle.draw(SCREEN)
+    AI_Paddle.draw(SCREEN)
     enemyPaddle.draw(SCREEN)
 
 def update_game(dimensions):
     ball.update(dimensions, SCREEN, score)
-    playerPaddle.update(ball, dimensions)
+    AI_Paddle.update(ball, dimensions)
     enemyPaddle.update(ball, dimensions)
 
 def main():
