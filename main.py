@@ -36,9 +36,31 @@ def draw_divider(color, dimensions, dot_size):
         rect = pygame.Rect(width//2, i, dot_size, dot_size)
         pygame.draw.rect(SCREEN, color, rect)
 
+def draw_speed(ball):
+    color = BG_ELEM_COLOR
+    if(ball.speed > 10):
+        color = (100, 100, 80)
+    if(ball.speed > 15):
+        color = (150, 100, 80)
+    if(ball.speed > 20):
+        color = (175, 100, 80)
+    if(ball.speed > 25):
+        color = (200, 100, 80)
+    if(ball.speed >= 30):
+        color = (255, 100, 80)
+
+    width = SCREEN.get_width()
+    text = FONT.render('{0:.2f}'.format(ball.speed), True, color)
+    text = pygame.transform.scale(text, (90, 50))
+    rect = text.get_rect()
+    rect.center = (width // 2, 60)
+    pygame.draw.rect(SCREEN, BG_COLOR, rect.inflate(0,15))
+    SCREEN.blit(text, rect)
+
 def draw_board(dimensions):
     score.draw(SCREEN, dimensions)
     draw_divider(BG_ELEM_COLOR, dimensions, 7)
+    draw_speed(ball)
     ball.draw(SCREEN)
     playerPaddle.draw(SCREEN)
     enemyPaddle.draw(SCREEN)
