@@ -1,8 +1,9 @@
+import math
 import pygame
 pygame.init()
 
-FLASH_RATE = 100
-FLASH_TIME = 500
+FLASH_RATE = 200
+FLASH_TIME = 1000
 GOAL_COLOR = (100, 155, 100)
 
 def scaleText(text_surface, dimensions):
@@ -36,7 +37,6 @@ class ScoreCard():
 class Score():
     def __init__(self, color, font, name):
         self.score = 0
-        self.last_flash = 0
         self.goal_time = 0
         self.goal_scored = False
         self.name = name
@@ -67,16 +67,15 @@ class Score():
     def flashGoal(self):
         current_time = pygame.time.get_ticks()
         elasped_time = current_time - self.goal_time
-        flash_time = current_time - self.last_flash
 
-        if(elasped_time >= FLASH_TIME):
+        if(self.goal_scored and elasped_time < FLASH_TIME):
+            if(math.ceil(elasped_time/FLASH_RATE) % 2 == 1):
+                self.text = self.font.render(str(self.score), True, GOAL_COLOR)
+            else:
+                self.text = self.font.render(str(self.score), True, self.color)
+        else:
             self.text = self.font.render(str(self.score), True, self.color)
             self.goal_scored = False
-        elif(self.goal_scored and flash_time < FLASH_RATE):
-            self.text = self.font.render(str(self.score), True, self.color)
-        elif(self.goal_scored):
-            self.text = self.font.render(str(self.score), True, GOAL_COLOR)
-            self.last_flash = current_time
 
 
 
