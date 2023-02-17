@@ -68,7 +68,8 @@ class Ball(pygame.sprite.Sprite):
             self.reacted = False
 
     def reactHit(self):
-        self.speed += .05
+        if(self.speed < 30):
+            self.speed += .05
         current_time = pygame.time.get_ticks()
         if not self.reacted:
             self.image.fill(HIT_COLOR)
@@ -103,8 +104,9 @@ class Ball(pygame.sprite.Sprite):
                 self.rect.top = paddle.rect.bottom
 
     def paddleHit(self, paddle):
+        if(self.speed < 30):
+            self.speed += .5
         self.reactHit()
         self.handleCollision(paddle)
-        self.speed += .5
         self.changeAngle(paddle)
         self.position = self.rect.center

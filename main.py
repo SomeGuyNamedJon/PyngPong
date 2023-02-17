@@ -37,6 +37,7 @@ def draw_divider(color, dimensions, dot_size):
         pygame.draw.rect(SCREEN, color, rect)
 
 def draw_speed(ball):
+    string = '{0:.2f}'.format(ball.speed)
     color = BG_ELEM_COLOR
     if(ball.speed > 10):
         color = (100, 100, 80)
@@ -48,9 +49,10 @@ def draw_speed(ball):
         color = (200, 100, 80)
     if(ball.speed >= 30):
         color = (255, 100, 80)
+        string = "MAX"
 
     width = SCREEN.get_width()
-    text = FONT.render('{0:.2f}'.format(ball.speed), True, color)
+    text = FONT.render(string, True, color)
     text = pygame.transform.scale(text, (90, 50))
     rect = text.get_rect()
     rect.center = (width // 2, 60)
