@@ -55,8 +55,8 @@ class Score():
         
         self.text = scaleText(self.text, new_scale)
         rect = centerRect(self.text, new_center)
-        screen.blit(self.text, rect)
         self.flashGoal()
+        screen.blit(self.text, rect)
 
     def goal(self):
         self.goal_time = pygame.time.get_ticks()
@@ -67,15 +67,19 @@ class Score():
     def flashGoal(self):
         current_time = pygame.time.get_ticks()
         elasped_time = current_time - self.goal_time
+        (width, height) = text_size = self.text.get_size()
 
         if(self.goal_scored and elasped_time < FLASH_TIME):
             if(math.ceil(elasped_time/FLASH_RATE) % 2 == 1):
                 self.text = self.font.render(str(self.score), True, GOAL_COLOR)
+                text_size = (width + 50, height + 50)
             else:
                 self.text = self.font.render(str(self.score), True, self.color)
         else:
             self.text = self.font.render(str(self.score), True, self.color)
             self.goal_scored = False
+
+        self.text = scaleText(self.text, text_size)
 
 
 
