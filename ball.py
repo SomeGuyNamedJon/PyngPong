@@ -43,9 +43,9 @@ class Ball(pygame.sprite.Sprite):
             self.direction = (self.direction[0], -self.direction[1])
         if self.rect.left <= 0 or self.rect.right >= width:
             if(self.rect.left <= 0):
-                score.enemyPoint()
+                score.score('B')
             else:
-                score.playerPoint()
+                score.score('A')
             self.resetBall(width, height)
 
         #if the ball somehow ends up outside the top or bottom bounds, just reset 

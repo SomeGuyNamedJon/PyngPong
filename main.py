@@ -19,12 +19,13 @@ FPS = 60
 PADDLE_A_SOUND = pygame.mixer.Sound("pongblipc5.wav")
 PADDLE_B_SOUND = pygame.mixer.Sound("pongblipf5.wav")
 BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
+FONT = pygame.font.Font("BitPap.ttf", 500)
 
 playerPaddle = PaddlePlayer(50, HEIGHT//2, PADDLE_A_SOUND)
 AI_Paddle = PaddleAI(50, HEIGHT//2, PADDLE_A_SOUND)
 enemyPaddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
 ball = Ball((0,0), (-1,1), WIDTH//2, HEIGHT//2, BALL_SOUND)
-score = Score()
+score = Score(BG_ELEM_COLOR, FONT)
 
 def draw_background():
     SCREEN.fill(BG_COLOR)
@@ -36,15 +37,15 @@ def draw_divider(color, dimensions, dot_size):
         pygame.draw.rect(SCREEN, color, rect)
 
 def draw_board(dimensions):
-    score.draw(SCREEN, dimensions, BG_ELEM_COLOR)
+    score.draw(SCREEN, dimensions)
     draw_divider(BG_ELEM_COLOR, dimensions, 7)
     ball.draw(SCREEN)
-    AI_Paddle.draw(SCREEN)
+    playerPaddle.draw(SCREEN)
     enemyPaddle.draw(SCREEN)
 
 def update_game(dimensions):
     ball.update(dimensions, SCREEN, score)
-    AI_Paddle.update(ball, dimensions)
+    playerPaddle.update(ball, dimensions)
     enemyPaddle.update(ball, dimensions)
 
 def main():
