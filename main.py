@@ -1,4 +1,4 @@
-import time
+import random as r
 import pygame
 from paddle import PaddlePlayer, PaddleAI
 from ball import Ball
@@ -10,6 +10,11 @@ os.chdir("assets")
 pygame.init()
 pygame.display.set_caption("PλngPong")
 
+SPEED_COLOR_1 = (200, 175, 70)
+SPEED_COLOR_2 = (222, 204, 51)
+SPEED_COLOR_3 = (233, 124, 92)
+SPEED_COLOR_4 = (244, 87, 68)
+SPEED_COLOR_MAX = (255, 31, 31)
 BG_COLOR = (50, 50, 50)
 BG_ELEM_COLOR = (70, 70, 70)
 WIDTH, HEIGHT = 960, 540
@@ -20,11 +25,14 @@ PADDLE_A_SOUND = pygame.mixer.Sound("pongblipc5.wav")
 PADDLE_B_SOUND = pygame.mixer.Sound("pongblipf5.wav")
 BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
 FONT = pygame.font.Font("BitPap.ttf", 500)
+BX = r.uniform(-1.0, 1.0)
+BY = r.uniform(-1.0, 1.0)
+BALL_DIRECTION = (BX, BY)
 
 playerPaddle = PaddlePlayer(50, HEIGHT//2, PADDLE_A_SOUND)
 AI_Paddle = PaddleAI(50, HEIGHT//2, PADDLE_A_SOUND)
 enemyPaddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
-ball = Ball((0,0), (-1,1), WIDTH//2, HEIGHT//2, BALL_SOUND)
+ball = Ball((0,0), BALL_DIRECTION, WIDTH//2, HEIGHT//2, BALL_SOUND)
 score = ScoreCard(BG_ELEM_COLOR, FONT)
 
 def draw_background():
@@ -40,15 +48,15 @@ def draw_speed(ball):
     string = '{0:.2f}'.format(ball.speed)
     color = BG_ELEM_COLOR
     if(ball.speed > 10):
-        color = (100, 100, 80)
+        color = SPEED_COLOR_1
     if(ball.speed > 15):
-        color = (150, 100, 80)
+        color = SPEED_COLOR_2
     if(ball.speed > 20):
-        color = (175, 100, 80)
+        color = SPEED_COLOR_3
     if(ball.speed > 25):
-        color = (200, 100, 80)
+        color = SPEED_COLOR_4
     if(ball.speed >= 30):
-        color = (255, 100, 80)
+        color = SPEED_COLOR_MAX
         string = "MAX"
 
     width = SCREEN.get_width()
