@@ -49,7 +49,10 @@ class Score():
     def draw(self, screen, dimensions):
         (width, height) = dimensions
 
-        new_width = width // 3
+        if(width > 1000):
+            new_width = width * 2 // 3
+        else:
+            new_width = width // 3
         new_height = height * 2 // 3
         if self.base.get_width() < new_width:
             new_width = self.base.get_width()
