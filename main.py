@@ -48,13 +48,13 @@ def draw_divider(color, dimensions, dot_size):
 def draw_speed(ball):
     string = '{0:.2f}'.format(ball.speed)
     color = BG_ELEM_COLOR
-    if(ball.speed > 10):
+    if(ball.speed > 9):
         color = SPEED_COLOR_1
-    if(ball.speed > 15):
+    if(ball.speed > 12):
         color = SPEED_COLOR_2
-    if(ball.speed > 20):
+    if(ball.speed > 18):
         color = SPEED_COLOR_3
-    if(ball.speed > 25):
+    if(ball.speed > 24):
         color = SPEED_COLOR_4
     if(ball.speed >= 30):
         color = SPEED_COLOR_MAX
