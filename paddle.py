@@ -9,8 +9,8 @@ BASE_COLOR = (200,200,200)
 HIT_COLOR = (255,255,255)
 POINT_COLOR = (230, 255, 235)
 LOSS_COLOR = (230, 180, 200)
-BASE_SPEED = 10
-BASE_FOLLOW = 150
+BASE_SPEED = 15
+BASE_FOLLOW = 300
 
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, sound):
