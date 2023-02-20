@@ -17,7 +17,8 @@ def newRect(text, position):
     return text_rect
 
 class ScoreCard():
-    def __init__(self, color, font):
+    def __init__(self, color, font, sound):
+        self.sound = sound
         self.a = Score(color, font, 'A')
         self.b = Score(color, font, 'B')
 
@@ -31,6 +32,7 @@ class ScoreCard():
                 self.a.goal()
             case 'B':
                 self.b.goal()
+        self.sound.play()
 
 class Score():
     def __init__(self, color, font, name):

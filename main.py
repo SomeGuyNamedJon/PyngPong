@@ -24,6 +24,7 @@ FPS = 60
 PADDLE_A_SOUND = pygame.mixer.Sound("pongblipc5.wav")
 PADDLE_B_SOUND = pygame.mixer.Sound("pongblipf5.wav")
 BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
+GOAL_SOUND = pygame.mixer.Sound("goal.wav")
 FONT = pygame.font.Font("BitPap.ttf", 500)
 BX = r.uniform(-1.0, 1.0)
 BY = r.uniform(-1.0, 1.0)
@@ -33,7 +34,7 @@ playerPaddle = PaddlePlayer(50, HEIGHT//2, PADDLE_A_SOUND)
 AI_Paddle = PaddleAI(50, HEIGHT//2, PADDLE_A_SOUND)
 enemyPaddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
 ball = Ball((0,0), BALL_DIRECTION, WIDTH//2, HEIGHT//2, BALL_SOUND)
-score = ScoreCard(BG_ELEM_COLOR, FONT)
+score = ScoreCard(BG_ELEM_COLOR, FONT, GOAL_SOUND)
 
 def draw_background():
     SCREEN.fill(BG_COLOR)
