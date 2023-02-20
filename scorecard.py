@@ -4,7 +4,7 @@ pygame.init()
 
 FLASH_RATE = 200
 FLASH_TIME = 1000
-GOAL_COLOR = (100, 155, 100)
+GOAL_COLOR = (100, 180, 100)
 
 def scaleText(text_surface, dimensions):
     (width, height) = dimensions
