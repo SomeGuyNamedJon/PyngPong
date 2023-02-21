@@ -16,11 +16,11 @@ class MenuManager():
         self.play_button = Button("Play", font, button_top, button_size, start)
         self.settings_button = Button("Settings",  font, button_mid, button_size, settings)
         self.menu_button = Button("Main", font, button_top, button_size, menu)
-        self.back_button = Button("Back", font, button_mid, button_size, back)
+        self.back_button = Button("Back", font, button_bottom, button_size, back)
         self.quit_button = Button("Quit", font, button_bottom, button_size, quit)
 
         self.menu_buttons = [self.play_button, self.settings_button, self.quit_button]
-        self.settings_buttons = [self.back_button, self.quit_button]
+        self.settings_buttons = [self.back_button]
         self.pause_buttons = [self.menu_button, self.settings_button, self.quit_button]
 
     def update(self, dimensions):
@@ -34,9 +34,9 @@ class MenuManager():
         self.play_button.updatePosition(button_top)
         self.settings_button.updatePosition(button_mid)
         self.menu_button.updatePosition(button_top)
-        self.back_button.updatePosition(button_mid)
+        self.back_button.updatePosition(button_bottom)
         self.quit_button.updatePosition(button_bottom)
 
         self.menu_buttons = [self.play_button, self.settings_button, self.quit_button]
-        self.settings_buttons = [self.back_button, self.quit_button]
+        self.settings_buttons = [self.back_button]
         self.pause_buttons = [self.menu_button, self.settings_button, self.quit_button]
