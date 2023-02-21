@@ -1,23 +1,25 @@
 import pygame
 pygame.init()
 
+BASE_COLOR = (30, 30, 30)
+FONT_COLOR = (255, 255, 255)
+SELECTED_COLOR = (60, 60, 60)
+
 class Button(pygame.sprite.Sprite):
-    def __init__(self,string,font,font_color,color_on,color_off,position,size,function): #Add given properties as parameters
+    def __init__(self,string,font,position,size,function): #Add given properties as parameters
         pygame.sprite.Sprite.__init__(self)
 
         self.string = string
-        self.color_on = color_on
-        self.color_off = color_off
         self.position = position
         self.function = function
 
         self.image = pygame.Surface(size)
-        self.image.fill(self.color_off)
+        self.image.fill(BASE_COLOR)
         self.rect = self.image.get_rect()
         self.rect.center = self.position
         self.clicked = False
 
-        self.text = font.render(string, True, font_color)
+        self.text = font.render(string, True, FONT_COLOR)
 
     def draw(self,screen):
         text_rect = self.rect.inflate(-50, -30)
@@ -32,9 +34,9 @@ class Button(pygame.sprite.Sprite):
     def update(self):
         self.rect.center = self.position
         if(self.selected()):
-            self.image.fill(self.color_on)
+            self.image.fill(SELECTED_COLOR)
         else:
-            self.image.fill(self.color_off)
+            self.image.fill(BASE_COLOR)
 
     def click(self):
         self.function()

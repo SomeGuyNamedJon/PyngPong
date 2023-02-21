@@ -1,6 +1,7 @@
 import pygame
 from button import Button
 from game_manager import GameManager
+from menu_manager import MenuManager
 from settings import Settings
 import os
 
@@ -18,22 +19,12 @@ SPEED_COLOR_4 = (235, 80, 50)
 SPEED_COLOR_MAX = (255, 50, 30)
 BG_COLOR = (50, 50, 50)
 BG_ELEM_COLOR = (70, 70, 70)
-BUTTON_COLOR = (30, 30, 30)
-BUTTON_FONT_COLOR = (255, 255, 255)
-BUTTON_SELECTED = (60, 60, 60)
 
 ### DEFAULT WINDOW
 WIDTH, HEIGHT = 960, 540
 DIMENSIONS = (WIDTH, HEIGHT)
 SCREEN = pygame.display.set_mode(DIMENSIONS)
 FPS = 60
-
-### BUTTON SIZE AND POSITION
-BUTTON_SIZE = (450,125)
-BUTTON_TOP = HEIGHT // 4
-BUTTON_MID = HEIGHT // 2
-BUTTON_BOTTOM = HEIGHT * 3 // 4
-BUTTON_X = WIDTH // 2
 
 ### FONTS
 BUTTON_FONT = pygame.font.Font("PingPong.otf", 120)
@@ -77,16 +68,8 @@ def pause():
     scene = "pause"
     pygame.mouse.set_visible(True)
 
-### BUTTONS
-play_button = Button("Play", BUTTON_FONT, BUTTON_FONT_COLOR, BUTTON_COLOR, BUTTON_SELECTED, (BUTTON_X, BUTTON_TOP), BUTTON_SIZE, start)
-settings_button = Button("Settings",  BUTTON_FONT, BUTTON_FONT_COLOR, BUTTON_COLOR, BUTTON_SELECTED, (BUTTON_X, BUTTON_MID), BUTTON_SIZE, settings)
-quit_button = Button("Quit", BUTTON_FONT, BUTTON_FONT_COLOR, BUTTON_COLOR, BUTTON_SELECTED, (BUTTON_X, BUTTON_BOTTOM), BUTTON_SIZE, quit)
-menu_button = Button("Main", BUTTON_FONT, BUTTON_FONT_COLOR, BUTTON_COLOR, BUTTON_SELECTED, (BUTTON_X, BUTTON_TOP), BUTTON_SIZE, menu)
-back_button = Button("Back", BUTTON_FONT, BUTTON_FONT_COLOR, BUTTON_COLOR, BUTTON_SELECTED, (BUTTON_X, BUTTON_MID), BUTTON_SIZE, back)
-
-menu_buttons = [play_button, settings_button, quit_button]
-settings_buttons = [back_button, quit_button]
-pause_buttons = [menu_button, settings_button, quit_button]
+### MENUS
+menus = MenuManager(DIMENSIONS, BUTTON_FONT, (start, settings, menu, back))
 
 ### DEFAULT SCENE - main, play, settings, pause
 scene = "main"
@@ -153,21 +136,21 @@ def play(dimensions):
     draw_board(dimensions)
 
 def main_menu(dimensions):
-    draw_buttons(menu_buttons)
-    update_buttons(menu_buttons)
+    draw_buttons(menus.menu_buttons)
+    update_buttons(menus.menu_buttons)
 
 def settings_menu(dimensions):    
-    draw_buttons(settings_buttons)
-    update_buttons(settings_buttons)
+    draw_buttons(menus.settings_buttons)
+    update_buttons(menus.settings_buttons)
 
 def pause_menu(dimensions):
     draw_board(dimensions)
-    draw_buttons(pause_buttons)
-    update_buttons(pause_buttons)
+    draw_buttons(menus.pause_buttons)
+    update_buttons(menus.pause_buttons)
 
 ### MAIN LOOP
 def main():
-    buttons = menu_buttons
+    buttons = menus.menu_buttons
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -193,13 +176,13 @@ def main():
         match(scene):
             case "main":
                 main_menu(dimensions)
-                buttons = menu_buttons
+                buttons = menus.menu_buttons
             case "settings":
                 settings_menu(dimensions)
-                buttons = settings_buttons
+                buttons = menus.settings_buttons
             case "pause":
                 pause_menu(dimensions)
-                buttons = pause_buttons
+                buttons = menus.pause_buttons
             case "play":
                 play(dimensions)
             case _:
