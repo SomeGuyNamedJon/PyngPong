@@ -3,6 +3,7 @@ import pygame
 from paddle import PaddlePlayer, PaddleAI
 from ball import Ball
 from scorecard import ScoreCard
+from button import Button
 import os
 
 # start in assets folder and initialize pygame
@@ -19,6 +20,9 @@ SPEED_COLOR_4 = (235, 80, 50)
 SPEED_COLOR_MAX = (255, 50, 30)
 BG_COLOR = (50, 50, 50)
 BG_ELEM_COLOR = (70, 70, 70)
+BUTTON_COLOR = (30, 30, 30)
+BUTTON_FONT_COLOR = (255, 255, 255)
+BUTTON_SELECTED = (60, 60, 60)
 
 ### DEFAULT WINDOW
 WIDTH, HEIGHT = 960, 540
@@ -26,12 +30,20 @@ DIMENSIONS = (WIDTH, HEIGHT)
 SCREEN = pygame.display.set_mode(DIMENSIONS)
 FPS = 60
 
+### BUTTON SIZE AND POSITION
+BUTTON_SIZE = (450,75)
+BUTTON_TOP = HEIGHT // 3
+BUTTON_MID = HEIGHT // 2
+BUTTON_BOTTOM = HEIGHT * 2 // 3
+BUTTON_X = WIDTH // 2
+
 ### SOUNDS AND FONTS
 PADDLE_A_SOUND = pygame.mixer.Sound("pongblipc5.wav")
 PADDLE_B_SOUND = pygame.mixer.Sound("pongblipf5.wav")
 BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
 GOAL_SOUND = pygame.mixer.Sound("goal.wav")
 FONT = pygame.font.Font("BitPap.ttf", 500)
+BUTTON_FONT = pygame.font.SysFont("NotoSans", 50)
 
 ### BALL START
 BX = r.uniform(-2.5, 2.5)
@@ -46,12 +58,35 @@ CPU2_Paddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
 ball = Ball((0,0), BALL_DIRECTION, WIDTH//2, HEIGHT//2, BALL_SOUND)
 score = ScoreCard(BG_ELEM_COLOR, FONT, GOAL_SOUND)
 
+### BUTTON FUNCTIONS
+def menu():
+    global scene
+    scene = "main"
+
+def play():
+    global scene 
+    scene = "play"
+
+def settings():
+    global scene
+    scene = "settings"
+
+### BUTTONS
+play_button = Button("Play", BUTTON_FONT, BUTTON_FONT_COLOR, BUTTON_COLOR, BUTTON_SELECTED, (BUTTON_X, BUTTON_TOP), BUTTON_SIZE, play)
+settings_button = Button("Settings",  BUTTON_FONT, BUTTON_FONT_COLOR, BUTTON_COLOR, BUTTON_SELECTED, (BUTTON_X, BUTTON_MID), BUTTON_SIZE, settings)
+quit_button = Button("Quit", BUTTON_FONT, BUTTON_FONT_COLOR, BUTTON_COLOR, BUTTON_SELECTED, (BUTTON_X, BUTTON_BOTTOM), BUTTON_SIZE, quit)
+menu_buttons = [play_button, settings_button, quit_button]
+
 ### DEFAULT SCENE - main, play, settings, pause
-scene = "play"
+scene = "main"
 
 ### DRAW FUNCTIONS
 def draw_background():
     SCREEN.fill(BG_COLOR)
+
+def draw_buttons(button_list):
+    for button in button_list:
+        button.draw(SCREEN)
 
 def draw_divider(color, dimensions, dot_size):
     (width, height) = dimensions
@@ -87,22 +122,28 @@ def draw_board(dimensions):
     draw_divider(BG_ELEM_COLOR, dimensions, 7)
     draw_speed(ball)
     ball.draw(SCREEN)
-    CPU1_Paddle.draw(SCREEN)
+    Player1_Paddle.draw(SCREEN)
     CPU2_Paddle.draw(SCREEN)
 
 ### UPDATE FUNCTIONS
 def update_game(dimensions):
     ball.update(dimensions, SCREEN, score)
-    CPU1_Paddle.update(ball, dimensions)
+    Player1_Paddle.update(ball, dimensions)
     CPU2_Paddle.update(ball, dimensions)
+
+def update_buttons(button_list):
+    for button in button_list:
+        button.update()
 
 ### SCENES
 def play(dimensions):
+    pygame.mouse.set_visible(False)
     update_game(dimensions)        
     draw_board(dimensions)
 
 def main_menu(dimensions):
-    pass
+    draw_buttons(menu_buttons)
+    update_buttons(menu_buttons)
 
 def settings(dimensions):
     pass
@@ -112,7 +153,6 @@ def pause(dimensions):
 
 ### MAIN LOOP
 def main():
-    pygame.mouse.set_visible(False)
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -125,6 +165,10 @@ def main():
                 case pygame.QUIT:
                     run = False
                     break
+                case pygame.MOUSEBUTTONUP:
+                    for button in menu_buttons:
+                        if button.selected():
+                            button.click()
         
         match(scene):
             case "main":

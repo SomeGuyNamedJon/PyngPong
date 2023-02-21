@@ -2,31 +2,37 @@ import pygame
 pygame.init()
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self,color_on,color_off,sound,x,y,size,function): #Add given properties as parameters
+    def __init__(self,string,font,font_color,color_on,color_off,position,size,function): #Add given properties as parameters
         pygame.sprite.Sprite.__init__(self)
+
+        self.string = string
+        self.color_on = color_on
+        self.color_off = color_off
+        self.position = position
+        self.function = function
 
         self.image = pygame.Surface(size)
         self.image.fill(self.color_off)
-        
-        self.color_on = color_on
-        self.color_off = color_off
-        self.position = (x,y)
-        self.sound = sound
-        self.function = function
-
         self.rect = self.image.get_rect()
         self.rect.center = self.position
         self.clicked = False
 
-    def draw(self,screen):
-        pygame.draw.rect(screen, self.color_off, self.rect)
-        screen.blit(self.image, self.rect)
+        self.text = font.render(string, True, font_color)
 
-    def selected(self, mouse_pos):
+    def draw(self,screen):
+        screen.blit(self.image, self.rect)
+        screen.blit(self.text, self.rect)
+
+    def selected(self):
+        mouse_pos = pygame.mouse.get_pos()
         return self.rect.collidepoint(mouse_pos)
 
-    def update(self, screen):
+    def update(self):
         self.rect.center = self.position
+        if(self.selected()):
+            self.image.fill(self.color_on)
+        else:
+            self.image.fill(self.color_off)
 
     def click(self):
         self.function()
