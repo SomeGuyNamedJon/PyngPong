@@ -40,8 +40,8 @@ BUTTON_FONT = pygame.font.Font("PingPong.otf", 120)
 FONT = pygame.font.Font("BitPap.ttf", 500)
 
 ### GAME AND SETTINGS
-settings = Settings("cpu", "cpu")
-game = GameManager(settings, DIMENSIONS, FONT)
+setting = Settings("cpu", "cpu")
+game = GameManager(setting, DIMENSIONS, FONT)
 
 ### BUTTON FUNCTIONS
 def menu():
@@ -52,7 +52,7 @@ def menu():
     scene = "main"
     pygame.mouse.set_visible(True)
 
-    game = GameManager(settings, DIMENSIONS, FONT)
+    game = GameManager(setting, DIMENSIONS, FONT)
 
 def back():
     global scene
