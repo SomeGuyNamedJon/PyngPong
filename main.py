@@ -13,7 +13,6 @@ pygame.display.set_caption("PλngPong")
 
 ### COLORS
 BG_COLOR = (50, 50, 50)
-BG_ELEM_COLOR = (70, 70, 70)
 
 ### DEFAULT WINDOW
 WIDTH, HEIGHT = 960, 540
