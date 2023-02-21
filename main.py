@@ -36,6 +36,8 @@ enemyPaddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
 ball = Ball((0,0), BALL_DIRECTION, WIDTH//2, HEIGHT//2, BALL_SOUND)
 score = ScoreCard(BG_ELEM_COLOR, FONT, GOAL_SOUND)
 
+scene = "game"
+
 def draw_background():
     SCREEN.fill(BG_COLOR)
 
@@ -81,23 +83,49 @@ def update_game(dimensions):
     AI_Paddle.update(ball, dimensions)
     enemyPaddle.update(ball, dimensions)
 
+### SCENES
+
+def game(dimensions):
+    update_game(dimensions)        
+    draw_board(dimensions)
+
+def main_menu(dimensions):
+    pass
+
+def settings(dimensions):
+    pass
+
+def pause(dimensions):
+    pass
+
+### MAIN LOOP
+
 def main():
     pygame.mouse.set_visible(False)
     clock = pygame.time.Clock()
     run = True
     while run:
         clock.tick(FPS)
-        dimensions = (SCREEN.get_width(), SCREEN.get_height())
-
         draw_background()
-        update_game(dimensions)        
-        draw_board(dimensions)
+        dimensions = (SCREEN.get_width(), SCREEN.get_height())
 
         for event in pygame.event.get():
             match event.type:
                 case pygame.QUIT:
                     run = False
                     break
+        
+        match(scene):
+            case "main":
+                main_menu(dimensions)
+            case "settings":
+                settings(dimensions)
+            case "pause":
+                pause(dimensions)
+            case "game":
+                game(dimensions)
+            case _:
+                run = False
 
         pygame.display.update()
 
