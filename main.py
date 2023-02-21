@@ -171,7 +171,7 @@ def main():
                     if event.key == pygame.K_ESCAPE:
                             if scene == "pause":
                                 start()
-                            else:
+                            elif scene == "play":
                                 pause()
         
         match(scene):
