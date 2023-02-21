@@ -20,8 +20,10 @@ class Button(pygame.sprite.Sprite):
         self.text = font.render(string, True, font_color)
 
     def draw(self,screen):
+        text_rect = self.rect.inflate(-50, -30)
+        text_rect.center = self.rect.center
         screen.blit(self.image, self.rect)
-        screen.blit(self.text, self.rect)
+        screen.blit(self.text, text_rect)
 
     def selected(self):
         mouse_pos = pygame.mouse.get_pos()

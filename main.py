@@ -31,10 +31,10 @@ SCREEN = pygame.display.set_mode(DIMENSIONS)
 FPS = 60
 
 ### BUTTON SIZE AND POSITION
-BUTTON_SIZE = (450,75)
-BUTTON_TOP = HEIGHT // 3
+BUTTON_SIZE = (450,125)
+BUTTON_TOP = HEIGHT // 4
 BUTTON_MID = HEIGHT // 2
-BUTTON_BOTTOM = HEIGHT * 2 // 3
+BUTTON_BOTTOM = HEIGHT * 3 // 4
 BUTTON_X = WIDTH // 2
 
 ### SOUNDS AND FONTS
@@ -43,7 +43,7 @@ PADDLE_B_SOUND = pygame.mixer.Sound("pongblipf5.wav")
 BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
 GOAL_SOUND = pygame.mixer.Sound("goal.wav")
 FONT = pygame.font.Font("BitPap.ttf", 500)
-BUTTON_FONT = pygame.font.SysFont("NotoSans", 50)
+BUTTON_FONT = pygame.font.Font("PingPong.otf", 120)
 
 ### BALL START
 BX = r.uniform(-2.5, 2.5)
