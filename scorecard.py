@@ -4,6 +4,7 @@ pygame.init()
 
 FLASH_RATE = 200
 FLASH_TIME = 1000
+BASE_COLOR = (70, 70, 70)
 GOAL_COLOR = (100, 180, 100)
 
 def scaleText(text_surface, dimensions):
@@ -17,10 +18,10 @@ def newRect(text, position):
     return text_rect
 
 class ScoreCard():
-    def __init__(self, color, font, sound):
+    def __init__(self, font, sound):
         self.sound = sound
-        self.a = Score(color, font, 'A')
-        self.b = Score(color, font, 'B')
+        self.a = Score(font, 'A')
+        self.b = Score(font, 'B')
 
     def draw(self, screen, dimensions):
         self.a.draw(screen, dimensions)
@@ -35,14 +36,13 @@ class ScoreCard():
         self.sound.play()
 
 class Score():
-    def __init__(self, color, font, name):
+    def __init__(self, font, name):
         self.score = 0
         self.goal_time = 0
         self.goal_scored = False
         self.name = name
         self.font = font
-        self.color = color
-        self.text = font.render(str(self.score), True, color)
+        self.text = font.render(str(self.score), True, BASE_COLOR)
         self.rect = self.text.get_rect()
         self.base = self.text
 
@@ -86,9 +86,9 @@ class Score():
                 text_size = (width + 50, height + 50)
                 self.rect.center = (self.rect.centerx - 25, self.rect.centery - 25)
             else:
-                self.text = self.font.render(str(self.score), True, self.color)
+                self.text = self.font.render(str(self.score), True, BASE_COLOR)
         else:
-            self.text = self.font.render(str(self.score), True, self.color)
+            self.text = self.font.render(str(self.score), True, BASE_COLOR)
             self.goal_scored = False
         
         self.text = scaleText(self.text, text_size)

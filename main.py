@@ -1,9 +1,7 @@
-import random as r
 import pygame
-from paddle import PaddlePlayer, PaddleAI
-from ball import Ball
-from scorecard import ScoreCard
 from button import Button
+from game_manager import GameManager
+from settings import Settings
 import os
 
 # start in assets folder and initialize pygame
@@ -37,34 +35,24 @@ BUTTON_MID = HEIGHT // 2
 BUTTON_BOTTOM = HEIGHT * 3 // 4
 BUTTON_X = WIDTH // 2
 
-### SOUNDS AND FONTS
-PADDLE_A_SOUND = pygame.mixer.Sound("pongblipc5.wav")
-PADDLE_B_SOUND = pygame.mixer.Sound("pongblipf5.wav")
-BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
-GOAL_SOUND = pygame.mixer.Sound("goal.wav")
-FONT = pygame.font.Font("BitPap.ttf", 500)
+### FONTS
 BUTTON_FONT = pygame.font.Font("PingPong.otf", 120)
+FONT = pygame.font.Font("BitPap.ttf", 500)
 
-### BALL START
-BX = r.uniform(-2.5, 2.5)
-BY = r.uniform(-1.0, 1.0)
-BALL_DIRECTION = (1 if BX == 0 else BX, 1 if BY == 0 else BY)
-
-### GAME OBJECTS
-Player1_Paddle = PaddlePlayer(50, HEIGHT//2, PADDLE_A_SOUND)
-Player2_Paddle = PaddlePlayer(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
-CPU1_Paddle = PaddleAI(50, HEIGHT//2, PADDLE_A_SOUND)
-CPU2_Paddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
-ball = Ball((0,0), BALL_DIRECTION, WIDTH//2, HEIGHT//2, BALL_SOUND)
-score = ScoreCard(BG_ELEM_COLOR, FONT, GOAL_SOUND)
+### GAME AND SETTINGS
+settings = Settings("cpu", "cpu")
+game = GameManager(settings, DIMENSIONS, FONT)
 
 ### BUTTON FUNCTIONS
 def menu():
+    global game
     global scene
     global prev_scene
     prev_scene = scene 
     scene = "main"
     pygame.mouse.set_visible(True)
+
+    game = GameManager(settings, DIMENSIONS, FONT)
 
 def back():
     global scene
@@ -142,18 +130,18 @@ def draw_speed(ball):
     SCREEN.blit(text, rect)
 
 def draw_board(dimensions):
-    score.draw(SCREEN, dimensions)
+    game.score.draw(SCREEN, dimensions)
     draw_divider(BG_ELEM_COLOR, dimensions, 7)
-    draw_speed(ball)
-    ball.draw(SCREEN)
-    Player1_Paddle.draw(SCREEN)
-    CPU2_Paddle.draw(SCREEN)
+    draw_speed(game.ball)
+    game.ball.draw(SCREEN)
+    game.paddle_a.draw(SCREEN)
+    game.paddle_b.draw(SCREEN)
 
 ### UPDATE FUNCTIONS
 def update_game(dimensions):
-    ball.update(dimensions, SCREEN, score)
-    Player1_Paddle.update(ball, dimensions)
-    CPU2_Paddle.update(ball, dimensions)
+    game.ball.update(dimensions, SCREEN, game.score)
+    game.paddle_a.update(game.ball, dimensions)
+    game.paddle_b.update(game.ball, dimensions)
 
 def update_buttons(button_list):
     for button in button_list:

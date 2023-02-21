@@ -1,6 +1,4 @@
-import pygame
-pygame.init()
-
 class Settings():
-    def __init__(self):
-        pass
+    def __init__(self, a="player", b="cpu"):
+        self.a = a
+        self.b = b
