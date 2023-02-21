@@ -11,10 +11,8 @@ os.chdir("assets")
 pygame.init()
 pygame.display.set_caption("PλngPong")
 
-### COLORS
-BG_COLOR = (50, 50, 50)
-
 ### DEFAULT WINDOW
+BG_COLOR = (50, 50, 50)
 WIDTH, HEIGHT = 960, 540
 DIMENSIONS = (WIDTH, HEIGHT)
 SCREEN = pygame.display.set_mode(DIMENSIONS)
