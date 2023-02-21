@@ -12,11 +12,6 @@ pygame.init()
 pygame.display.set_caption("PλngPong")
 
 ### COLORS
-SPEED_COLOR_1 = (165, 165, 80)
-SPEED_COLOR_2 = (185, 125, 70)
-SPEED_COLOR_3 = (205, 100, 60)
-SPEED_COLOR_4 = (235, 80, 50)
-SPEED_COLOR_MAX = (255, 50, 30)
 BG_COLOR = (50, 50, 50)
 BG_ELEM_COLOR = (70, 70, 70)
 
@@ -31,7 +26,7 @@ BUTTON_FONT = pygame.font.Font("PingPong.otf", 120)
 FONT = pygame.font.Font("BitPap.ttf", 500)
 
 ### GAME AND SETTINGS
-setting = Settings("cpu", "cpu")
+setting = Settings("player", "cpu")
 game = GameManager(setting, DIMENSIONS, FONT)
 
 ### BUTTON FUNCTIONS
@@ -79,52 +74,16 @@ prev_scene = scene
 def draw_background():
     SCREEN.fill(BG_COLOR)
 
+def draw_game(dimensions):
+    game.draw(SCREEN, dimensions)
+
 def draw_buttons(button_list):
     for button in button_list:
         button.draw(SCREEN)
 
-def draw_divider(color, dimensions, dot_size):
-    (width, height) = dimensions
-    for i in range(0, height, dot_size*2):
-        rect = pygame.Rect(width//2, i, dot_size, dot_size)
-        pygame.draw.rect(SCREEN, color, rect)
-
-def draw_speed(ball):
-    string = '{0:.2f}'.format(ball.speed)
-    color = BG_ELEM_COLOR
-    if(ball.speed > 9):
-        color = SPEED_COLOR_1
-    if(ball.speed > 12):
-        color = SPEED_COLOR_2
-    if(ball.speed > 18):
-        color = SPEED_COLOR_3
-    if(ball.speed > 24):
-        color = SPEED_COLOR_4
-    if(ball.speed >= 30):
-        color = SPEED_COLOR_MAX
-        string = "MAX"
-
-    width = SCREEN.get_width()
-    text = FONT.render(string, True, color)
-    text = pygame.transform.scale(text, (90, 50))
-    rect = text.get_rect()
-    rect.center = (width // 2 + 5, 60)
-    pygame.draw.rect(SCREEN, BG_COLOR, rect.inflate(0,15))
-    SCREEN.blit(text, rect)
-
-def draw_board(dimensions):
-    game.score.draw(SCREEN, dimensions)
-    draw_divider(BG_ELEM_COLOR, dimensions, 7)
-    draw_speed(game.ball)
-    game.ball.draw(SCREEN)
-    game.paddle_a.draw(SCREEN)
-    game.paddle_b.draw(SCREEN)
-
 ### UPDATE FUNCTIONS
 def update_game(dimensions):
-    game.ball.update(dimensions, SCREEN, game.score)
-    game.paddle_a.update(game.ball, dimensions)
-    game.paddle_b.update(game.ball, dimensions)
+    game.update(dimensions, SCREEN)
 
 def update_buttons(button_list, dimensions):
     menus.update(dimensions)
@@ -134,7 +93,7 @@ def update_buttons(button_list, dimensions):
 ### SCENES
 def play(dimensions):
     update_game(dimensions)        
-    draw_board(dimensions)
+    draw_game(dimensions)
 
 def main_menu(dimensions):
     draw_buttons(menus.menu_buttons)
@@ -145,7 +104,7 @@ def settings_menu(dimensions):
     update_buttons(menus.settings_buttons, dimensions)
 
 def pause_menu(dimensions):
-    draw_board(dimensions)
+    draw_game(dimensions)
     draw_buttons(menus.pause_buttons)
     update_buttons(menus.pause_buttons, dimensions)
 
