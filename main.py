@@ -64,6 +64,7 @@ def menu():
     global prev_scene
     prev_scene = scene 
     scene = "main"
+    pygame.mouse.set_visible(True)
 
 def back():
     global scene
@@ -72,18 +73,21 @@ def back():
 def start():
     global scene
     scene = "play"
+    pygame.mouse.set_visible(False)
 
 def settings():
     global scene
     global prev_scene
     prev_scene = scene
     scene = "settings"
+    pygame.mouse.set_visible(True)
 
 def pause():
     global scene
     global prev_scene
     prev_scene = scene 
     scene = "pause"
+    pygame.mouse.set_visible(True)
 
 ### BUTTONS
 play_button = Button("Play", BUTTON_FONT, BUTTON_FONT_COLOR, BUTTON_COLOR, BUTTON_SELECTED, (BUTTON_X, BUTTON_TOP), BUTTON_SIZE, start)
@@ -157,7 +161,6 @@ def update_buttons(button_list):
 
 ### SCENES
 def play(dimensions):
-    pygame.mouse.set_visible(False)
     update_game(dimensions)        
     draw_board(dimensions)
 
