@@ -126,7 +126,8 @@ def update_game(dimensions):
     game.paddle_a.update(game.ball, dimensions)
     game.paddle_b.update(game.ball, dimensions)
 
-def update_buttons(button_list):
+def update_buttons(button_list, dimensions):
+    menus.update(dimensions)
     for button in button_list:
         button.update()
 
@@ -137,16 +138,16 @@ def play(dimensions):
 
 def main_menu(dimensions):
     draw_buttons(menus.menu_buttons)
-    update_buttons(menus.menu_buttons)
+    update_buttons(menus.menu_buttons, dimensions)
 
 def settings_menu(dimensions):    
     draw_buttons(menus.settings_buttons)
-    update_buttons(menus.settings_buttons)
+    update_buttons(menus.settings_buttons, dimensions)
 
 def pause_menu(dimensions):
     draw_board(dimensions)
     draw_buttons(menus.pause_buttons)
-    update_buttons(menus.pause_buttons)
+    update_buttons(menus.pause_buttons, dimensions)
 
 ### MAIN LOOP
 def main():

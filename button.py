@@ -30,6 +30,9 @@ class Button(pygame.sprite.Sprite):
     def selected(self):
         mouse_pos = pygame.mouse.get_pos()
         return self.rect.collidepoint(mouse_pos)
+    
+    def updatePosition(self, position):
+        self.position = position
 
     def update(self):
         self.rect.center = self.position
