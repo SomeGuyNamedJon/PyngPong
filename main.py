@@ -4,12 +4,14 @@ from paddle import PaddlePlayer, PaddleAI
 from ball import Ball
 from scorecard import ScoreCard
 import os
+
+# start in assets folder and initialize pygame
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 os.chdir("assets")
-
 pygame.init()
 pygame.display.set_caption("PλngPong")
 
+### COLORS
 SPEED_COLOR_1 = (165, 165, 80)
 SPEED_COLOR_2 = (185, 125, 70)
 SPEED_COLOR_3 = (205, 100, 60)
@@ -17,27 +19,37 @@ SPEED_COLOR_4 = (235, 80, 50)
 SPEED_COLOR_MAX = (255, 50, 30)
 BG_COLOR = (50, 50, 50)
 BG_ELEM_COLOR = (70, 70, 70)
+
+### DEFAULT WINDOW
 WIDTH, HEIGHT = 960, 540
 DIMENSIONS = (WIDTH, HEIGHT)
 SCREEN = pygame.display.set_mode(DIMENSIONS)
 FPS = 60
+
+### SOUNDS AND FONTS
 PADDLE_A_SOUND = pygame.mixer.Sound("pongblipc5.wav")
 PADDLE_B_SOUND = pygame.mixer.Sound("pongblipf5.wav")
 BALL_SOUND = pygame.mixer.Sound("pongblipb3.wav")
 GOAL_SOUND = pygame.mixer.Sound("goal.wav")
 FONT = pygame.font.Font("BitPap.ttf", 500)
+
+### BALL START
 BX = r.uniform(-2.5, 2.5)
 BY = r.uniform(-1.0, 1.0)
 BALL_DIRECTION = (1 if BX == 0 else BX, 1 if BY == 0 else BY)
 
-playerPaddle = PaddlePlayer(50, HEIGHT//2, PADDLE_A_SOUND)
-AI_Paddle = PaddleAI(50, HEIGHT//2, PADDLE_A_SOUND)
-enemyPaddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
+### GAME OBJECTS
+Player1_Paddle = PaddlePlayer(50, HEIGHT//2, PADDLE_A_SOUND)
+Player2_Paddle = PaddlePlayer(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
+CPU1_Paddle = PaddleAI(50, HEIGHT//2, PADDLE_A_SOUND)
+CPU2_Paddle = PaddleAI(WIDTH - 50, HEIGHT//2, PADDLE_B_SOUND)
 ball = Ball((0,0), BALL_DIRECTION, WIDTH//2, HEIGHT//2, BALL_SOUND)
 score = ScoreCard(BG_ELEM_COLOR, FONT, GOAL_SOUND)
 
-scene = "game"
+### DEFAULT SCENE - main, play, settings, pause
+scene = "play"
 
+### DRAW FUNCTIONS
 def draw_background():
     SCREEN.fill(BG_COLOR)
 
@@ -75,17 +87,17 @@ def draw_board(dimensions):
     draw_divider(BG_ELEM_COLOR, dimensions, 7)
     draw_speed(ball)
     ball.draw(SCREEN)
-    AI_Paddle.draw(SCREEN)
-    enemyPaddle.draw(SCREEN)
+    CPU1_Paddle.draw(SCREEN)
+    CPU2_Paddle.draw(SCREEN)
 
+### UPDATE FUNCTIONS
 def update_game(dimensions):
     ball.update(dimensions, SCREEN, score)
-    AI_Paddle.update(ball, dimensions)
-    enemyPaddle.update(ball, dimensions)
+    CPU1_Paddle.update(ball, dimensions)
+    CPU2_Paddle.update(ball, dimensions)
 
 ### SCENES
-
-def game(dimensions):
+def play(dimensions):
     update_game(dimensions)        
     draw_board(dimensions)
 
@@ -99,7 +111,6 @@ def pause(dimensions):
     pass
 
 ### MAIN LOOP
-
 def main():
     pygame.mouse.set_visible(False)
     clock = pygame.time.Clock()
@@ -122,12 +133,12 @@ def main():
                 settings(dimensions)
             case "pause":
                 pause(dimensions)
-            case "game":
-                game(dimensions)
+            case "play":
+                play(dimensions)
             case _:
                 run = False
 
-        pygame.display.update()
+        pygame.display.flip()
 
 if __name__ == "__main__":
     main()
