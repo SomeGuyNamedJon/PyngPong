@@ -1,4 +1,5 @@
 from button import Button
+from slider import Slider
 import pygame
 pygame.init()
 
@@ -12,6 +13,7 @@ class MenuManager():
         button_mid = (center_x, center_y)
         button_bottom = (center_x, center_y + 140)
 
+        # Menu buttons
         (start, settings, menu, back) = functions
         self.play_button = Button("Play", font, button_top, button_size, start)
         self.settings_button = Button("Settings",  font, button_mid, button_size, settings)
@@ -19,8 +21,11 @@ class MenuManager():
         self.back_button = Button("Back", font, button_bottom, button_size, back)
         self.quit_button = Button("Quit", font, button_bottom, button_size, quit)
 
+        # Settings sliders
+        self.test_slider = Slider(button_top, 400, 40, 1, 30)
+
         self.menu_buttons = [self.play_button, self.settings_button, self.quit_button]
-        self.settings_buttons = [self.back_button]
+        self.settings_buttons = [self.back_button, self.test_slider]
         self.pause_buttons = [self.menu_button, self.settings_button, self.quit_button]
 
     def update(self, dimensions):
@@ -38,5 +43,5 @@ class MenuManager():
         self.quit_button.updatePosition(button_bottom)
 
         self.menu_buttons = [self.play_button, self.settings_button, self.quit_button]
-        self.settings_buttons = [self.back_button]
+        self.settings_buttons = [self.back_button, self.test_slider]
         self.pause_buttons = [self.menu_button, self.settings_button, self.quit_button]

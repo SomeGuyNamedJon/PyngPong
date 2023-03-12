@@ -1,5 +1,6 @@
 import pygame
 from button import Button
+from slider import Slider
 from game_manager import GameManager
 from menu_manager import MenuManager
 from settings import Settings
@@ -82,10 +83,13 @@ def draw_buttons(button_list):
 def update_game(dimensions):
     game.update(dimensions, SCREEN)
 
-def update_buttons(button_list, dimensions):
+def update_buttons(button_list, dimensions, mouse_pos, event):
     menus.update(dimensions)
     for button in button_list:
-        button.update()
+        if isinstance(button, Slider):
+            button.update(mouse_pos, event)
+        else:
+            button.update()
 
 ### SCENES
 def play(dimensions):
@@ -94,16 +98,16 @@ def play(dimensions):
 
 def main_menu(dimensions):
     draw_buttons(menus.menu_buttons)
-    update_buttons(menus.menu_buttons, dimensions)
+    update_buttons(menus.menu_buttons, dimensions, 0, 0)
 
-def settings_menu(dimensions):    
+def settings_menu(dimensions, mouse_pos, event):    
     draw_buttons(menus.settings_buttons)
-    update_buttons(menus.settings_buttons, dimensions)
+    update_buttons(menus.settings_buttons, dimensions, mouse_pos, event)
 
 def pause_menu(dimensions):
     draw_game(dimensions)
     draw_buttons(menus.pause_buttons)
-    update_buttons(menus.pause_buttons, dimensions)
+    update_buttons(menus.pause_buttons, dimensions, 0, 0)
 
 ### MAIN LOOP
 def main():
@@ -121,8 +125,9 @@ def main():
                     run = False
                 case pygame.MOUSEBUTTONUP:
                     for button in buttons:
-                        if button.selected() and event.button == 1:
-                            button.click()
+                        if isinstance(button, Button):
+                            if button.selected() and event.button == 1:
+                                button.click()
                 case pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                             if scene == "pause":
@@ -130,22 +135,22 @@ def main():
                             elif scene == "play":
                                 pause()
         
-        match(scene):
-            case "main":
-                main_menu(dimensions)
-                buttons = menus.menu_buttons
-            case "settings":
-                settings_menu(dimensions)
-                buttons = menus.settings_buttons
-            case "pause":
-                pause_menu(dimensions)
-                buttons = menus.pause_buttons
-            case "play":
-                play(dimensions)
-            case _:
-                run = False
+            match(scene):
+                case "main":
+                    main_menu(dimensions)
+                    buttons = menus.menu_buttons
+                case "settings":
+                    settings_menu(dimensions, pygame.mouse.get_pos(), event)
+                    buttons = menus.settings_buttons
+                case "pause":
+                    pause_menu(dimensions)
+                    buttons = menus.pause_buttons
+                case "play":
+                    play(dimensions)
+                case _:
+                    run = False
 
-        pygame.display.flip()
+            pygame.display.flip()
 
 if __name__ == "__main__":
     main()
