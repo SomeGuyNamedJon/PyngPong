@@ -1,5 +1,9 @@
 import pygame
 
+BASE_COLOR = (30, 30, 30)
+FONT_COLOR = (255, 255, 255)
+KNOB_COLOR = (60, 60, 60)
+
 class Slider:
     def __init__(self, position, width, height, min_value, max_value):
         self.position = position
@@ -8,27 +12,28 @@ class Slider:
         self.min_value = min_value
         self.max_value = max_value
         self.value = min_value
-        self.rect = pygame.Rect(0, 0, width, height)
+        
+        self.image = pygame.Surface((width, height))
+        self.image.fill(BASE_COLOR)
+        self.rect = self.image.get_rect()
         self.rect.center = position
-        self.color = pygame.Color('black')
-        self.knob_rect = pygame.Rect(0, 0, height, height)
-        self.knob_rect.centerx = self.rect.left
+        
+        self.knob_image = pygame.Surface((height, height))
+        self.knob_image.fill(KNOB_COLOR)
+        self.knob_rect = self.knob_image.get_rect()
+        self.knob_rect.left = self.rect.left
         self.knob_rect.centery = self.rect.centery
-        self.knob_color = pygame.Color('grey')
-        self.font = pygame.font.Font(None, height)
+        
+        self.font = pygame.font.Font("BitPap.ttf", height - 10)
         self.dragging = False
 
-    def selected(self):
-        mouse_pos = pygame.mouse.get_pos()
-        return self.rect.collidepoint(mouse_pos)
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+        screen.blit(self.knob_image, self.knob_rect)
 
-    def draw(self, surface):
-        pygame.draw.rect(surface, self.color, self.rect)
-        pygame.draw.rect(surface, self.knob_color, self.knob_rect)
-
-        label = self.font.render(str(self.value), True, pygame.Color('black'))
+        label = self.font.render(str(self.value), True, FONT_COLOR)
         label_rect = label.get_rect(center=self.knob_rect.center)
-        surface.blit(label, label_rect)
+        screen.blit(label, label_rect)
 
     def update(self, mouse_pos, event):
         if event.type == pygame.MOUSEBUTTONDOWN and self.knob_rect.collidepoint(mouse_pos):

@@ -83,7 +83,7 @@ def draw_buttons(button_list):
 def update_game(dimensions):
     game.update(dimensions, SCREEN)
 
-def update_buttons(button_list, dimensions, mouse_pos, event):
+def update_buttons(button_list, dimensions, mouse_pos=0, event=0):
     menus.update(dimensions)
     for button in button_list:
         if isinstance(button, Slider):
@@ -98,7 +98,7 @@ def play(dimensions):
 
 def main_menu(dimensions):
     draw_buttons(menus.menu_buttons)
-    update_buttons(menus.menu_buttons, dimensions, 0, 0)
+    update_buttons(menus.menu_buttons, dimensions)
 
 def settings_menu(dimensions, mouse_pos, event):    
     draw_buttons(menus.settings_buttons)
@@ -107,7 +107,7 @@ def settings_menu(dimensions, mouse_pos, event):
 def pause_menu(dimensions):
     draw_game(dimensions)
     draw_buttons(menus.pause_buttons)
-    update_buttons(menus.pause_buttons, dimensions, 0, 0)
+    update_buttons(menus.pause_buttons, dimensions)
 
 ### MAIN LOOP
 def main():
