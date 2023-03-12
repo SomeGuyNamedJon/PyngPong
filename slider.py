@@ -35,7 +35,12 @@ class Slider:
         label_rect = label.get_rect(center=self.knob_rect.center)
         screen.blit(label, label_rect)
 
+    def updatePosition(self, position):
+        self.position = position
+
     def update(self, mouse_pos, event):
+        self.rect.center = self.position
+        self.knob_rect.centery = self.rect.centery
         if event.type == pygame.MOUSEBUTTONDOWN and self.knob_rect.collidepoint(mouse_pos):
             self.dragging = True
         elif event.type == pygame.MOUSEBUTTONUP:
