@@ -28,6 +28,13 @@ class Slider:
         self.dragging = False
 
     def draw(self, screen):
+        # Update knob position based on current value
+        percentage = (self.value - self.min_value) / (self.max_value - self.min_value)
+        knob_pos = (self.rect.left + int(percentage * self.rect.width), self.rect.centery)
+        self.knob_rect.left = knob_pos[0]
+        self.knob_rect.centery = knob_pos[1]
+        self.knob_rect.clamp_ip(self.rect)
+
         screen.blit(self.image, self.rect)
         screen.blit(self.knob_image, self.knob_rect)
 
@@ -40,7 +47,6 @@ class Slider:
 
     def update(self, mouse_pos, event):
         self.rect.center = self.position
-        self.knob_rect.centery = self.rect.centery
         if event.type == pygame.MOUSEBUTTONDOWN and self.knob_rect.collidepoint(mouse_pos):
             self.dragging = True
         elif event.type == pygame.MOUSEBUTTONUP:
