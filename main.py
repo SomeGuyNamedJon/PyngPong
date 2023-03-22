@@ -62,7 +62,7 @@ def pause():
     pygame.mouse.set_visible(True)
 
 ### MENUS
-menus = MenuManager(DIMENSIONS, BUTTON_FONT, (start, settings, menu, back))
+menus = MenuManager(BUTTON_FONT, (start, settings, menu, back))
 
 ### DEFAULT SCENE - main, play, settings, pause
 scene = "main"
