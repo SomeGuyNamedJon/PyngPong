@@ -1,5 +1,4 @@
-from button import Button
-from slider import Slider
+from ui_object import Button, Slider
 import pygame
 pygame.init()
 
