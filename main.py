@@ -1,6 +1,4 @@
 import pygame
-from button import Button
-from slider import Slider
 from game_manager import GameManager
 from menu_manager import MenuManager
 from settings import Settings
