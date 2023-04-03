@@ -24,13 +24,13 @@ class UI_Object(pygame.sprite.Sprite):
         self.position = position
 
 class Button(UI_Object):
-    def __init__(self, string, font, position, size, function):
+    def __init__(self, label, font, position, size, function):
         UI_Object.__init__(self, position, size)
-        self.string = string
+        self.label = label
         self.function = function
         self.clicked = False
         self.hover = False
-        self.text = font.render(string, True, FONT_COLOR)
+        self.text = font.render(label, True, FONT_COLOR)
 
     def draw(self, screen):
         text_rect = self.rect.inflate(-50, -30)

@@ -60,7 +60,7 @@ def pause():
     pygame.mouse.set_visible(True)
 
 ### MENUS
-menus = MenuManager(BUTTON_FONT, (start, settings, menu, back))
+menus = MenuManager(BUTTON_FONT, (start, settings, menu, back, quit))
 
 ### DEFAULT SCENE - main, play, settings, pause
 scene = "main"
@@ -81,8 +81,8 @@ def draw_ui(elem_list):
 def update_game(dimensions):
     game.update(dimensions, SCREEN)
 
-def update_menu(dimensions):
-    menus.update(dimensions)
+def update_menu():
+    menus.update()
 
 def update_buttons(button_list):
     for button in button_list:
@@ -97,19 +97,19 @@ def play(dimensions):
     update_game(dimensions)        
     draw_game(dimensions)
 
-def main_menu(dimensions):
-    update_menu(dimensions)
+def main_menu():
+    update_menu()
     draw_ui(menus.menu_buttons)
     update_buttons(menus.menu_buttons)
 
-def settings_menu(dimensions):    
-    update_menu(dimensions)
+def settings_menu():    
+    update_menu()
     draw_ui(menus.settings_buttons + menus.settings_sliders)
     update_buttons(menus.settings_buttons)
 
 def pause_menu(dimensions):
     draw_game(dimensions)
-    update_menu(dimensions)
+    update_menu()
     draw_ui(menus.pause_buttons)
     update_buttons(menus.pause_buttons)
 
@@ -143,10 +143,10 @@ def main():
         
         match(scene):
             case "main":
-                main_menu(dimensions)
+                main_menu()
                 buttons = menus.menu_buttons
             case "settings":
-                settings_menu(dimensions)
+                settings_menu()
                 buttons = menus.settings_buttons
             case "pause":
                 pause_menu(dimensions)
