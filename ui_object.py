@@ -96,3 +96,67 @@ class Slider(UI_Object):
             self.knob_rect.centerx = min(max(mouse_pos[0], self.rect.left), self.rect.right)
             percentage = (self.knob_rect.centerx - self.rect.left) / self.rect.width
             self.value = int(self.min_value + percentage * (self.max_value - self.min_value))
+
+class Dropdown(UI_Object):
+    def __init__(self, position, size, options):
+        UI_Object.__init__(self, position, size)
+        self.font = pygame.font.Font("BitPap.ttf", size[1]//2)
+        self.options = options
+        self.selected_option = None
+        self.dropdown_open = False
+        self.option_rects = []
+        self.dropdown_rect = pygame.Rect(self.rect.left, self.rect.bottom, self.rect.width, 0)
+        self.update_options_rects()
+
+    def update_options_rects(self):
+        self.option_rects = []
+        for i, option in enumerate(self.options):
+            option_surface = self.font.render(str(option), True, FONT_COLOR)
+            option_rect = option_surface.get_rect()
+            option_rect.topleft = (self.rect.left, self.rect.bottom + i * option_rect.height)
+            self.option_rects.append(option_rect)
+        self.dropdown_rect.height = len(self.options) * option_rect.height
+
+    def toggle_dropdown(self):
+        self.dropdown_open = not self.dropdown_open
+
+    def close_dropdown(self):
+        self.dropdown_open = False
+
+    def select_option(self, option):
+        self.selected_option = option
+        self.close_dropdown()
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+        if self.dropdown_open:
+            pygame.draw.rect(screen, SELECTED_COLOR, self.dropdown_rect)
+            for option, option_rect in zip(self.options, self.option_rects):
+                screen.blit(self.font.render(str(option), True, FONT_COLOR), option_rect)
+
+        if self.selected_option is not None:
+            selected_label = self.font.render(self.selected_option, True, FONT_COLOR)
+            selected_rect = selected_label.get_rect(center=self.rect.center)
+            screen.blit(selected_label, selected_rect)
+
+    def selected(self):
+        mouse_pos = pygame.mouse.get_pos()
+        return self.rect.collidepoint(mouse_pos)
+
+    def update(self, event):
+        self.rect.center = self.position
+        self.update_options_rects()
+        self.dropdown_rect = pygame.Rect(self.rect.left, self.rect.bottom, self.rect.width, 0)
+        
+        if event.type == pygame.MOUSEBUTTONDOWN and self.selected():
+            self.toggle_dropdown()
+        elif event.type == pygame.MOUSEBUTTONDOWN and self.dropdown_open:
+            for i, option_rect in enumerate(self.option_rects):
+                if option_rect.collidepoint(event.pos):
+                    self.select_option(self.options[i])
+        elif event.type == pygame.MOUSEBUTTONDOWN and not self.selected():
+            self.close_dropdown()
+
+    def get_selected_option(self):
+        return self.selected_option

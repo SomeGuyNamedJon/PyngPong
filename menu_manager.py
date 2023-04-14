@@ -1,6 +1,6 @@
 import pygame
 from typing import List
-from ui_object import Button, Slider
+from ui_object import Button, Slider, Dropdown
 
 pygame.init()
 
@@ -14,8 +14,9 @@ class MenuManager():
 
         self.menu_buttons = self.create_buttons(["Play", "Settings", "Quit"], [0, 1, 4])
         self.pause_buttons = self.create_buttons(["Main", "Settings", "Quit"], [2, 1, 4])
-        self.settings_sliders = self.create_sliders([(self.padding, -self.padding), (-self.padding, -self.padding)])
+        self.settings_sliders = self.create_sliders([(0, 0), (0, 0)])
         self.settings_buttons = self.create_buttons(["Back"], [3])
+        self.settings_dropdowns = self.create_dropdowns([(0, 0), (0, 0)], [("Hello", "World", ":^)"), ("Is", "This", "A", "Dream?")])
 
     def create_buttons(self, labels: List[str], actions: List[int]):
         buttons = []
@@ -39,9 +40,14 @@ class MenuManager():
     def create_sliders(self, positions: List[tuple]):
         sliders = []
         for position in positions:
-            sliders.append(Slider((0, 0), 250, 50, 1, 30))
-            sliders[-1].updatePosition((pygame.display.Info().current_w // 2 + position[0], pygame.display.Info().current_h // 2 + position[1]))
+            sliders.append(Slider(position, 250, 50, 1, 30))
         return sliders
+    
+    def create_dropdowns(self, positions: List[tuple], options: List[tuple]):
+        dropdowns = []
+        for (position, option) in zip(positions, options):
+            dropdowns.append(Dropdown(position, (250, 50), option))
+        return dropdowns
 
     def update(self):
         center_x = pygame.display.Info().current_w // 2
@@ -60,3 +66,6 @@ class MenuManager():
 
         for slider in self.settings_sliders:
             slider.updatePosition((center_x + self.padding if slider == self.settings_sliders[0] else center_x - self.padding, center_y - self.padding))
+
+        for dropdown in self.settings_dropdowns:
+            dropdown.updatePosition((center_x + self.padding if dropdown == self.settings_dropdowns[0] else center_x - self.padding, center_y - self.padding//2))

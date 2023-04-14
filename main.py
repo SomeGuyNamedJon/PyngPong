@@ -92,6 +92,10 @@ def update_sliders(slider_list, mouse_pos, event):
     for slider in slider_list:
         slider.update(mouse_pos, event)
 
+def update_dropdowns(dropdown_list, event):
+    for dropdown in dropdown_list:
+        dropdown.update(event)
+
 ### SCENES
 def play(dimensions):
     update_game(dimensions)        
@@ -104,7 +108,7 @@ def main_menu():
 
 def settings_menu():    
     update_menu()
-    draw_ui(menus.settings_buttons + menus.settings_sliders)
+    draw_ui(menus.settings_buttons + menus.settings_sliders + menus.settings_dropdowns)
     update_buttons(menus.settings_buttons)
 
 def pause_menu(dimensions):
@@ -140,6 +144,7 @@ def main():
 
             if scene == "settings":
                 update_sliders(menus.settings_sliders, pygame.mouse.get_pos(), event)
+                update_dropdowns(menus.settings_dropdowns, event)
         
         match(scene):
             case "main":
