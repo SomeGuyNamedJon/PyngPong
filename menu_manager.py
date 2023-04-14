@@ -65,7 +65,7 @@ class MenuManager():
                 button.updatePosition(button_bottom)
 
         for slider in self.settings_sliders:
-            slider.updatePosition((center_x + self.padding if slider == self.settings_sliders[0] else center_x - self.padding, center_y - self.padding))
+            slider.updatePosition((center_x + self.padding if slider == self.settings_sliders[1] else center_x - self.padding, center_y - self.padding))
 
         for dropdown in self.settings_dropdowns:
-            dropdown.updatePosition((center_x + self.padding if dropdown == self.settings_dropdowns[0] else center_x - self.padding, center_y - self.padding//2))
+            dropdown.updatePosition((center_x + self.padding if dropdown == self.settings_dropdowns[1] else center_x - self.padding, center_y - self.padding//2))
