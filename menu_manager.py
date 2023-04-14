@@ -8,7 +8,7 @@ class MenuManager():
     def __init__(self, font, functions):
         self.font = font
         self.functions = functions
-        self.padding = 140
+        self.padding = 160
         self.button_size = (450, 125)
         self.origin = (0, 0)
 
