@@ -113,7 +113,7 @@ class Dropdown(UI_Object):
         for i, option in enumerate(self.options):
             option_surface = self.font.render(str(option), True, FONT_COLOR)
             option_rect = option_surface.get_rect()
-            option_rect.topleft = (self.rect.left, self.rect.bottom + i * option_rect.height)
+            option_rect.topleft = (self.rect.left + 3, self.rect.bottom + 3 + i * (option_rect.height + 3))
             self.option_rects.append(option_rect)
         self.dropdown_rect.height = len(self.options) * option_rect.height
 
